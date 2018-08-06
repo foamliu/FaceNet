@@ -44,7 +44,7 @@ def triplet_loss(y_true, y_pred):
 
 def get_indices():
     with open(identity_annot_filename, 'r') as file:
-        lines = file.readlines(file)
+        lines = file.readlines()
 
     ids = set()
     images = []
