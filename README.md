@@ -19,9 +19,6 @@ Follow the [instruction](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to do
 ## Architecture
 ![image](https://github.com/foamliu/FaceNet/raw/master/images/model.png)
 
-## ImageNet Pretrained Models
-Download [VGG16](https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels.h5) into models folder.
-
 ## Usage
 ### Data Pre-processing
 Extract training images:
