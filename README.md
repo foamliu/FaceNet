@@ -1,6 +1,6 @@
 # FaceNet
 
-This code is to reproduce: [FaceNet](https://arxiv.org/abs/1503.03832): A Unified Embedding for Face Recognition and Clustering
+This code is to reproduce: [FaceNet: A Unified Embedding for Face Recognition and Clustering](https://arxiv.org/abs/1503.03832).
 
 ## Dependencies
 - [NumPy](http://docs.scipy.org/doc/numpy-1.10.1/user/install.html)
@@ -10,9 +10,9 @@ This code is to reproduce: [FaceNet](https://arxiv.org/abs/1503.03832): A Unifie
 
 ## Dataset
 
-![image](https://github.com/foamliu/FaceNet/raw/master/images/CelebA.png)
-
 Follow the [instruction](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to download Large-scale CelebFaces Attributes (CelebA) Dataset.
+
+![image](https://github.com/foamliu/FaceNet/raw/master/images/CelebA.png)
 
 ## Architecture
 
