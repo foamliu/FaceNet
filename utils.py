@@ -2,8 +2,11 @@ import multiprocessing
 import os
 
 import cv2 as cv
+import keras.backend as K
 import tensorflow as tf
 from tensorflow.python.client import device_lib
+
+from config import alpha
 
 
 def ensure_folder(folder):
@@ -28,5 +31,10 @@ def draw_str(dst, target, s):
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
 
 
-def sparse_loss(y_true, y_pred):
-    return tf.nn.sparse_softmax_cross_entropy_with_logits(labels=y_true, logits=y_pred)
+def triplet_loss(y_true, y_pred):
+    a_pred = y_pred[:, 0:128]
+    p_pred = y_pred[:, 128:256]
+    n_pred = y_pred[:, 256:384]
+    loss = K.mean(
+        tf.norm(a_pred - p_pred, ord='euclidean', axis=-1) - tf.norm(a_pred - n_pred, ord='euclidean', axis=-1)) + alpha
+    return loss
