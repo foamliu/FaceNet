@@ -1,36 +1,27 @@
 # encoding=utf-8
-import pickle
+import os
 
-import keras
+import cv2 as cv
+import dlib
 import numpy as np
-from keras.preprocessing import sequence
+from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
-from config import batch_size, max_token_length, vocab_size, train_image_folder, valid_image_folder, L
+from config import batch_size, num_train_samples, num_valid_samples, img_size, channel, embedding_size, image_folder
+from utils import select_triplets
 
 
 class DataGenSequence(Sequence):
     def __init__(self, usage):
         self.usage = usage
 
-        vocab = pickle.load(open('data/vocab_train.p', 'rb'))
-        self.idx2word = sorted(vocab)
-        self.word2idx = dict(zip(self.idx2word, range(len(vocab))))
-
-        filename = 'data/encoded_{}_images.p'.format(usage)
-        self.image_encoding = pickle.load(open(filename, 'rb'))
-
         if usage == 'train':
-            samples_path = 'data/samples_train.p'
-            self.image_folder = train_image_folder
-            self.image_folder = train_image_folder
+            self.samples = select_triplets(num_train_samples)
         else:
-            samples_path = 'data/samples_valid.p'
-            self.image_folder = valid_image_folder
-            self.image_folder = valid_image_folder
+            self.samples = select_triplets(num_valid_samples)
 
-        samples = pickle.load(open(samples_path, 'rb'))
-        self.samples = samples
+        self.detector = dlib.get_frontal_face_detector()
+
         np.random.shuffle(self.samples)
 
     def __len__(self):
@@ -40,22 +31,28 @@ class DataGenSequence(Sequence):
         i = idx * batch_size
 
         length = min(batch_size, (len(self.samples) - i))
-        batch_image_input = np.empty((length, 7, 7, 512), dtype=np.float32)
-        caption_target = np.empty((length, vocab_size), dtype=np.int32)
-        alpha_target = np.zeros((length, L), dtype=np.float32)
-        text_input = []
+        batch_inputs = np.empty((3, length, img_size, img_size, channel), dtype=np.float32)
+        batch_dummy_target = np.zeros((length, embedding_size * 3), dtype=np.float32)
 
         for i_batch in range(length):
             sample = self.samples[i + i_batch]
-            image_id = sample['image_id']
-            image_input = np.array(self.image_encoding[image_id])
-            batch_image_input[i_batch] = image_input
+            for j, role in enumerate(['a', 'p', 'n']):
+                image_name = sample[role]
+                filename = os.path.join(image_folder, image_name)
+                image_bgr = cv.imread(filename)
+                image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
+                dets = self.detector(image_rgb, 1)
+                if len(dets) > 0:
+                    d = dets[0]
+                    x1, y1, x2, y2 = d.left(), d.top(), d.right(), d.bottom()
+                    image_rgb = image_rgb[y1:y2 + 1, x1:x2 + 1]
+                image_rgb = cv.resize(image_rgb, (img_size, img_size), cv.INTER_CUBIC)
+                batch_inputs[j, i_batch] = image_rgb
 
-            text_input.append(sample['input'])
-            caption_target[i_batch] = keras.utils.to_categorical(sample['output'], vocab_size)
+        for j in range(3):
+            batch_inputs[j] = preprocess_input(batch_inputs[j])
 
-        batch_text_input = sequence.pad_sequences(text_input, maxlen=max_token_length, padding='post')
-        return [batch_image_input, batch_text_input], [caption_target, alpha_target]
+        return [batch_inputs[0], batch_inputs[1], batch_inputs[2]], batch_dummy_target
 
     def on_epoch_end(self):
         np.random.shuffle(self.samples)

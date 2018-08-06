@@ -4,10 +4,13 @@ batch_size = 256
 epochs = 10000
 patience = 10
 embedding_size = 128
-num_samples = 202599
+num_images = 202599
+num_identities = 10177
 valid_ratio = 0.005
+num_train_samples = 100000
+num_valid_samples = 1000
+
 alpha = 0.2
 
 image_folder = 'data/img_align_celeba'
-annotations_filename = 'data/identity_CelebA.txt'
-
+identity_annot_filename = 'data/identity_CelebA.txt'

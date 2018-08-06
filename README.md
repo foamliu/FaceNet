@@ -16,12 +16,8 @@ CelebFaces Attributes Dataset (CelebA) is a large-scale face dataset with 10,177
 
 Follow the [instruction](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to download Large-scale CelebFaces Attributes (CelebA) Dataset.
 
-
-
 ## Architecture
-
-
-
+![image](https://github.com/foamliu/FaceNet/raw/master/images/model.png)
 
 ## ImageNet Pretrained Models
 Download [VGG16](https://github.com/fchollet/deep-learning-models/releases/download/v0.1/vgg16_weights_tf_dim_ordering_tf_kernels.h5) into models folder.

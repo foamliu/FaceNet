@@ -1,12 +1,13 @@
 import multiprocessing
 import os
+import random
 
 import cv2 as cv
 import keras.backend as K
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 
-from config import alpha
+from config import alpha, identity_annot_filename
 
 
 def ensure_folder(folder):
@@ -38,3 +39,44 @@ def triplet_loss(y_true, y_pred):
     loss = K.mean(
         tf.norm(a_pred - p_pred, ord='euclidean', axis=-1) - tf.norm(a_pred - n_pred, ord='euclidean', axis=-1)) + alpha
     return loss
+
+
+def get_indices():
+    with open(identity_annot_filename, 'r') as file:
+        lines = file.readlines(file)
+
+    ids = set()
+    images = []
+    image2id = {}
+    id2images = {}
+
+    for line in lines:
+        line = line.strip()
+        if len(line) > 0:
+            tokens = line.split(' ')
+            image_name = tokens[0]
+            id = tokens[1]
+            ids.add(id)
+            images.append(image_name)
+            image2id[image_name] = id
+            if id in id2images.keys():
+                id2images[id].append(image_name)
+            else:
+                id2images[id] = [image_name]
+
+    return list(ids), images, image2id, id2images
+
+
+def select_triplets(num_samples):
+    ids, images, image2id, id2images = get_indices()
+    data_set = []
+
+    for i in range(num_samples):
+        a_id = random.choice(ids)
+        a_p_images = random.sample(id2images[a_id], 2)
+        a_image = a_p_images[0]
+        p_image = a_p_images[1]
+        n_image = random.choice(images)
+        data_set.append({'a': a_image, 'p': p_image, 'n': n_image})
+
+    return data_set
