@@ -12,9 +12,11 @@ This code is to reproduce: [FaceNet: A Unified Embedding for Face Recognition an
 
 CelebFaces Attributes Dataset (CelebA) is a large-scale face dataset with 10,177 identities and 202,599 face images.
 
+![image](https://github.com/foamliu/FaceNet/raw/master/images/CelebA.png)
+
 Follow the [instruction](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to download Large-scale CelebFaces Attributes (CelebA) Dataset.
 
-![image](https://github.com/foamliu/FaceNet/raw/master/images/CelebA.png)
+
 
 ## Architecture
 
