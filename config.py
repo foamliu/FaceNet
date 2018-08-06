@@ -1,19 +1,14 @@
 import os
 
-img_rows, img_cols, img_size = 224, 224, 224
+img_size = 139
 channel = 3
 batch_size = 256
 epochs = 10000
 patience = 10
+embedding_size = 128
 num_train_samples = 14883151
 num_valid_samples = 2102270
-embedding_size = 512
-vocab_size = 17628
-max_token_length = 40
-num_image_features = 2048
-hidden_size = 512
-L = 49
-D = 512
+
 
 train_folder = 'data/ai_challenger_caption_train_20170902'
 valid_folder = 'data/ai_challenger_caption_validation_20170910'
