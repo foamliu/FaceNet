@@ -22,8 +22,6 @@ class DataGenSequence(Sequence):
 
         self.detector = dlib.get_frontal_face_detector()
 
-        np.random.shuffle(self.samples)
-
     def __len__(self):
         return int(np.ceil(len(self.samples) / float(batch_size)))
 
@@ -55,7 +53,10 @@ class DataGenSequence(Sequence):
         return [batch_inputs[0], batch_inputs[1], batch_inputs[2]], batch_dummy_target
 
     def on_epoch_end(self):
-        np.random.shuffle(self.samples)
+        if self.usage == 'train':
+            self.samples = select_triplets(num_train_samples)
+        else:
+            self.samples = select_triplets(num_valid_samples)
 
 
 def train_gen():

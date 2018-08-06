@@ -6,6 +6,7 @@ import cv2 as cv
 import keras.backend as K
 import tensorflow as tf
 from tensorflow.python.client import device_lib
+from tqdm import tqdm
 
 from config import alpha, identity_annot_filename
 
@@ -71,7 +72,7 @@ def select_triplets(num_samples):
     ids, images, image2id, id2images = get_indices()
     data_set = []
 
-    for i in range(num_samples):
+    for i in tqdm(range(num_samples)):
         a_id = random.choice(ids)
         a_p_images = random.sample(id2images[a_id], 2)
         a_image = a_p_images[0]
