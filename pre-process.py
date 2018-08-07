@@ -27,8 +27,8 @@ def check_image():
             tokens = line.split(' ')
             image_name = tokens[0].strip()
             id = tokens[1].strip()
+            filename = os.path.join(image_folder, image_name)
             try:
-                filename = os.path.join(image_folder, image_name)
                 image_bgr = cv.imread(filename)
                 image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
                 dets = detector(image_rgb, 1)
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     # if not os.path.isdir(image_folder):
     extract(image_folder)
 
-    check_image(image_folder)
+    check_image()
