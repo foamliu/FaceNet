@@ -39,6 +39,7 @@ def check_image():
                 image_rgb = cv.resize(image_rgb, (img_size, img_size), cv.INTER_CUBIC)
             except cv.error as err:
                 print(err)
+                print(filename)
 
 
 if __name__ == '__main__':
