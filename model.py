@@ -18,7 +18,7 @@ def build_model():
 
     input_a = Input((img_size, img_size, channel), name='anchor')
     input_p = Input((img_size, img_size, channel), name='positive')
-    input_n = Input((img_size, img_size, channel), name='negtive')
+    input_n = Input((img_size, img_size, channel), name='negative')
 
     normalize = Lambda(lambda x: x / tf.norm(x), name='normalize')
 

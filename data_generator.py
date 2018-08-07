@@ -31,12 +31,11 @@ class DataGenSequence(Sequence):
                 image_name = sample[role]
                 filename = os.path.join(image_folder, image_name)
                 image_bgr = cv.imread(filename)
+                image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
+                if np.random.random_sample() > 0.5:
+                    image_bgr = np.fliplr(image_bgr)
                 image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
-                image_rgb = cv.resize(image_rgb, (img_size, img_size), cv.INTER_CUBIC)
-                batch_inputs[j, i_batch] = image_rgb
-
-        for j in range(3):
-            batch_inputs[j] = preprocess_input(batch_inputs[j])
+                batch_inputs[j, i_batch] = preprocess_input(image_rgb)
 
         return [batch_inputs[0], batch_inputs[1], batch_inputs[2]], batch_dummy_target
 
