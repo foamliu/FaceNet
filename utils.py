@@ -8,7 +8,7 @@ import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename
+from config import alpha, identity_annot_filename, bbox_annot_filename
 
 
 def ensure_folder(folder):
@@ -40,6 +40,25 @@ def triplet_loss(y_true, y_pred):
     loss = K.mean(
         tf.norm(a_pred - p_pred, ord='euclidean', axis=-1) - tf.norm(a_pred - n_pred, ord='euclidean', axis=-1)) + alpha
     return loss
+
+
+def get_bbox():
+    with open(bbox_annot_filename, 'r') as file:
+        lines = file.readlines()
+
+    image2bbox = {}
+    for i in range(2, len(lines)):
+        line = line.strip()
+        if len(line) > 0:
+            tokens = line.split('    ')
+            image_name = tokens[0].strip()
+            tokens = tokens[1].strip().split(' ')
+            x_1 = int(tokens[0])
+            y_1 = int(tokens[0])
+            width = int(tokens[0])
+            height = int(tokens[0])
+            image2bbox[image_name] = (x_1, y_1, width, height)
+    return image2bbox
 
 
 def get_indices():
