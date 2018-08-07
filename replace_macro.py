@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
-if __name__ == '__main__':
+
+def replace():
     with open('result.json', 'r', encoding="utf-8") as file:
         result = json.load(file)
 
@@ -17,3 +18,6 @@ if __name__ == '__main__':
 
     with open('README.md', 'w', encoding="utf-8") as file:
         file.write(text)
+
+if __name__ == '__main__':
+    replace()
