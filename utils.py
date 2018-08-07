@@ -52,6 +52,8 @@ def get_bbox():
         line = line.strip()
         if len(line) > 0:
             tokens = line.split('    ')
+            if len(tokens) < 2:
+                print(line)
             image_name = tokens[0].strip()
             tokens = tokens[1].strip().split(' ')
             x_1 = int(tokens[0])
