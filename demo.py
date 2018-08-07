@@ -38,7 +38,7 @@ if __name__ == '__main__':
             batch_inputs[j, 0] = preprocess_input(image_rgb)
             cv.imwrite('images/{}_{}_image.png'.format(i, role), image_bgr)
 
-        y_pred = model.predict(batch_inputs)
+        y_pred = model.predict([batch_inputs[0], batch_inputs[1], batch_inputs[2]])
         a = y_pred[0, 0:128]
         p = y_pred[0, 128:256]
         n = y_pred[0, 256:384]
