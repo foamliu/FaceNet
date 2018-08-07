@@ -74,6 +74,8 @@ def select_triplets(num_samples):
 
     for i in tqdm(range(num_samples)):
         a_id = random.choice(ids)
+        while len(id2images[a_id]) <= 2:
+            a_id = random.choice(ids)
         a_p_images = random.sample(id2images[a_id], 2)
         a_image = a_p_images[0]
         p_image = a_p_images[1]
