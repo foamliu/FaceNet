@@ -25,21 +25,19 @@ def check_one_image(line):
         x1, y1, w, h = bbox
         filename = os.path.join(image_folder, image_name)
         original = cv.imread(filename)
-        cropped = original[y1:y1 + h, x1:x1 + w]
         try:
-            resized = cv.resize(cropped, (img_size, img_size), cv.INTER_CUBIC)
+            resized = cv.resize(original, (img_size, img_size), cv.INTER_CUBIC)
         except cv.error as err:
             print(filename)
             print('image_name={}: x1={}, y1={}, w={}, h={}'.format(image_name, x1, y1, w, h))
             print('image_name={} original.shape={}'.format(image_name, original.shape))
-            print('image_name={} cropped.shape={}'.format(image_name, cropped.shape))
             print('image_name={} resized.shape={}'.format(image_name, resized.shape))
 
 
 def check_image():
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
-    pool = Pool(1)
+    pool = Pool(24)
     for _ in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
         pass
     pool.close()
