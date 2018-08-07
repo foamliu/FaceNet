@@ -48,8 +48,8 @@ if __name__ == '__main__':
     # parameters
     ensure_folder('data')
 
-    # if not os.path.isdir(image_folder):
-    extract(image_folder)
+    if not os.path.isdir(image_folder):
+        extract(image_folder)
 
     bboxes = get_bbox()
     check_image()
