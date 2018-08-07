@@ -24,13 +24,15 @@ def check_one_image(line):
         bbox = bboxes[image_name]
         x1, y1, w, h = bbox
         filename = os.path.join(image_folder, image_name)
-        image = cv.imread(filename)
+        original = cv.imread(filename)
         try:
-            image = image[y1:y1 + h, x1:x1 + w]
-            image = cv.resize(image, (img_size, img_size), cv.INTER_CUBIC)
+            cropped = original[y1:y1 + h, x1:x1 + w]
+            resized = cv.resize(cropped, (img_size, img_size), cv.INTER_CUBIC)
         except cv.error as err:
             print(filename)
-            print('image.shape: ' + str(image.shape))
+            print('original.shape: ' + str(original.shape))
+            print('cropped.shape: ' + str(cropped.shape))
+            print('resized.shape: ' + str(resized.shape))
             print('x1={}, y1={}, w={}, h={}'.format(x1, y1, w, h))
 
 
