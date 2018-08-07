@@ -14,4 +14,4 @@ alpha = 0.2
 
 image_folder = 'data/img_align_celeba'
 identity_annot_filename = 'data/identity_CelebA.txt'
-bbox_annot_filename = 'list_bbox_celeba.txt'
+bbox_annot_filename = 'data/list_bbox_celeba.txt'
