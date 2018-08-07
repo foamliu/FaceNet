@@ -51,15 +51,12 @@ def get_bbox():
         line = lines[i]
         line = line.strip()
         if len(line) > 0:
-            tokens = line.split('    ')
-            if len(tokens) < 2:
-                print(line)
-            image_name = tokens[0].strip()
-            tokens = tokens[1].strip().split(' ')
-            x_1 = int(tokens[0])
-            y_1 = int(tokens[0])
-            width = int(tokens[0])
-            height = int(tokens[0])
+            tokens = line.split()
+            image_name = tokens[0]
+            x_1 = int(tokens[1])
+            y_1 = int(tokens[2])
+            width = int(tokens[3])
+            height = int(tokens[4])
             image2bbox[image_name] = (x_1, y_1, width, height)
     return image2bbox
 
