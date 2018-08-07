@@ -22,16 +22,16 @@ def check_one_image(line):
         tokens = line.split(' ')
         image_name = tokens[0].strip()
         bbox = bboxes[image_name]
+        x1, y1, w, h = bbox
         filename = os.path.join(image_folder, image_name)
+        image = cv.imread(filename)
         try:
-            image_bgr = cv.imread(filename)
-            image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
-            x1, y1, w, h = bbox
-            image_rgb = image_rgb[y1:y1 + h, x1:x1 + w]
-            image_rgb = cv.resize(image_rgb, (img_size, img_size), cv.INTER_CUBIC)
+            image = image[y1:y1 + h, x1:x1 + w]
+            image = cv.resize(image, (img_size, img_size), cv.INTER_CUBIC)
         except cv.error as err:
-            print(err)
             print(filename)
+            print('image.shape: ' + str(image.shape))
+            print('x1={}, y1={}, w={}, h={}'.format(x1, y1, w, h))
 
 
 def check_image():
