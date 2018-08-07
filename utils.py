@@ -50,7 +50,7 @@ def get_bbox():
     for i in range(2, len(lines)):
         line = lines[i]
         line = line.strip()
-        if len(lines) > 0:
+        if len(line) > 0:
             tokens = line.split('    ')
             image_name = tokens[0].strip()
             tokens = tokens[1].strip().split(' ')
