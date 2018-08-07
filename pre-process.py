@@ -30,10 +30,11 @@ def check_one_image(line):
             resized = cv.resize(cropped, (img_size, img_size), cv.INTER_CUBIC)
         except cv.error as err:
             print(filename)
+            print('x1={}, y1={}, w={}, h={}'.format(x1, y1, w, h))
             print('original.shape: ' + str(original.shape))
             print('cropped.shape: ' + str(cropped.shape))
             print('resized.shape: ' + str(resized.shape))
-            print('x1={}, y1={}, w={}, h={}'.format(x1, y1, w, h))
+
 
 
 def check_image():
