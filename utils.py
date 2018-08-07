@@ -8,7 +8,7 @@ import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, bbox_annot_filename
+from config import alpha, identity_annot_filename, bbox_annot_filename, num_train_samples, num_valid_samples
 
 
 def ensure_folder(folder):
@@ -38,7 +38,8 @@ def triplet_loss(y_true, y_pred):
     p_pred = y_pred[:, 128:256]
     n_pred = y_pred[:, 256:384]
     loss = K.mean(
-        tf.norm(a_pred - p_pred, ord='euclidean', axis=-1) - tf.norm(a_pred - n_pred, ord='euclidean', axis=-1)) + alpha
+        K.square(tf.norm(a_pred - p_pred, ord='euclidean', axis=-1)) - K.square(
+            tf.norm(a_pred - n_pred, ord='euclidean', axis=-1)) + alpha)
     return loss
 
 
@@ -87,18 +88,33 @@ def get_indices():
     return list(ids), images, image2id, id2images
 
 
-def select_triplets(num_samples):
+def select_triplets(usage):
     ids, images, image2id, id2images = get_indices()
+    if usage == 'train':
+        num_samples = num_train_samples
+        images = images[:num_train_samples]
+    else:
+        num_samples = num_valid_samples
+        images = images[num_train_samples:]
+
     data_set = []
 
     for i in tqdm(range(num_samples)):
-        a_id = random.choice(ids)
+        # choose a_image
+        a_image = random.choice(images)
+        a_id = image2id[a_image]
         while len(id2images[a_id]) <= 2:
-            a_id = random.choice(ids)
-        a_p_images = random.sample(id2images[a_id], 2)
-        a_image = a_p_images[0]
-        p_image = a_p_images[1]
+            a_image = random.choice(images)
+            a_id = image2id[a_image]
+        # choose p_image
+        p_image = random.choice(id2images[a_id])
+        while p_image == a_image:
+            p_image = random.choice(id2images[a_id])
+        # choose n_image
         n_image = random.choice(images)
+        while image2id[n_image] == image2id[a_image]:
+            n_image = random.choice(images)
+
         data_set.append({'a': a_image, 'p': p_image, 'n': n_image})
 
     return data_set

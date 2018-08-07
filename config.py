@@ -7,8 +7,8 @@ embedding_size = 128
 num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
-num_train_samples = 100000
-num_valid_samples = 1000
+num_train_samples = 200000
+num_valid_samples = 2599
 
 alpha = 0.2
 

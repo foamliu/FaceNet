@@ -1,7 +1,7 @@
 import keras.backend as K
 import tensorflow as tf
 from keras.applications.inception_resnet_v2 import InceptionResNetV2
-from keras.layers import Input, Dense, concatenate
+from keras.layers import Input, Dense, concatenate, Lambda
 from keras.models import Model
 from keras.utils import plot_model
 
@@ -20,9 +20,14 @@ def build_model():
     input_p = Input((img_size, img_size, channel), name='positive')
     input_n = Input((img_size, img_size, channel), name='negtive')
 
-    output_a = image_embedder(input_a)
-    output_p = image_embedder(input_p)
-    output_n = image_embedder(input_n)
+    normalize = Lambda(lambda x: x / tf.norm(x))
+
+    x = image_embedder(input_a)
+    output_a = normalize(x)
+    x = image_embedder(input_p)
+    output_p = normalize(x)
+    x = image_embedder(input_n)
+    output_n = normalize(x)
 
     merged_vector = concatenate([output_a, output_p, output_n], axis=-1)
 

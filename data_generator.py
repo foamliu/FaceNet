@@ -6,18 +6,14 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
-from config import batch_size, num_train_samples, num_valid_samples, img_size, channel, embedding_size, image_folder
+from config import batch_size, img_size, channel, embedding_size, image_folder
 from utils import select_triplets
 
 
 class DataGenSequence(Sequence):
     def __init__(self, usage):
         self.usage = usage
-
-        if usage == 'train':
-            self.samples = select_triplets(num_train_samples)
-        else:
-            self.samples = select_triplets(num_valid_samples)
+        self.samples = select_triplets(usage)
 
     def __len__(self):
         return int(np.ceil(len(self.samples) / float(batch_size)))
@@ -45,10 +41,7 @@ class DataGenSequence(Sequence):
         return [batch_inputs[0], batch_inputs[1], batch_inputs[2]], batch_dummy_target
 
     def on_epoch_end(self):
-        if self.usage == 'train':
-            self.samples = select_triplets(num_train_samples)
-        else:
-            self.samples = select_triplets(num_valid_samples)
+        self.samples = select_triplets(self.usage)
 
 
 def train_gen():
