@@ -46,7 +46,7 @@ def check_image():
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
     pool = Pool(24)
-    for _ in tqdm.tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
+    for _ in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
         pass
     pool.close()
     pool.join()
