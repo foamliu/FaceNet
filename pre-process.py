@@ -17,7 +17,6 @@ def extract(folder):
 
 
 def check_one_image(line):
-    bboxes = get_bbox()
     line = line.strip()
     if len(line) > 0:
         tokens = line.split(' ')
@@ -52,4 +51,5 @@ if __name__ == '__main__':
     # if not os.path.isdir(image_folder):
     extract(image_folder)
 
+    bboxes = get_bbox()
     check_image()
