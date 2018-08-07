@@ -47,3 +47,5 @@ if __name__ == '__main__':
 
     # if not os.path.isdir(image_folder):
     extract(image_folder)
+
+    check_image(image_folder)
