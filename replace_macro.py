@@ -10,13 +10,10 @@ if __name__ == '__main__':
         text = ''.join(text)
 
     for i in range(10):
-        key_distance_a_p = 'distance_{}_a_p'.format(i)
-        template = text.replace('$({})', )
-
-    for i in range(0, 10):
-        beam_data = [line.strip() for line in beam[i * 4:(i + 1) * 4]]
-        beam_text = '<br>'.join(beam_data)
-        template = template.replace('({})'.format(i), beam_text)
+        distance_a_p = 'distance_{}_a_p'.format(i)
+        text = text.replace('$({})'.format(distance_a_p), "{0:.2f}".format(result[distance_a_p]))
+        distance_a_n = 'distance_{}_a_n'.format(i)
+        text = text.replace('$({})'.format(distance_a_n), "{0:.2f}".format(result[distance_a_n]))
 
     with open('README.md', 'w', encoding="utf-8") as file:
-        file.write(template)
+        file.write(text)
