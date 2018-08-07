@@ -55,8 +55,8 @@ def get_indices():
         line = line.strip()
         if len(line) > 0:
             tokens = line.split(' ')
-            image_name = tokens[0]
-            id = tokens[1]
+            image_name = tokens[0].strip()
+            id = tokens[1].strip()
             ids.add(id)
             images.append(image_name)
             image2id[image_name] = id
