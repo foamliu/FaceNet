@@ -22,7 +22,7 @@ if __name__ == '__main__':
     samples = select_triplets('valid')
     samples = random.sample(samples, 10)
 
-    result = []
+    result = {}
 
     for i in range(len(samples)):
         sample = samples[i]
@@ -46,7 +46,8 @@ if __name__ == '__main__':
         distance_a_p = np.linalg.norm(a - p) ** 2
         distance_a_n = np.linalg.norm(a - n) ** 2
 
-        result.append({'distance_{}_a_p'.format(i): distance_a_p, 'distance_{}_a_n'.format(i): distance_a_n})
+        result['distance_{}_a_p'.format(i)] = distance_a_p
+        result['distance_{}_a_n'.format(i)] = distance_a_n
 
     with open('result.json', 'w') as file:
         json.dump(result, file, indent=4)
