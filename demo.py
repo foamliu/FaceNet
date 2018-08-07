@@ -1,15 +1,16 @@
 # import the necessary packages
+import json
 import os
-import pickle
 import random
 
 import cv2 as cv
 import keras.backend as K
 import numpy as np
-from keras.preprocessing import sequence
+from keras.applications.inception_resnet_v2 import preprocess_input
 
-from config import max_token_length, start_word, stop_word, test_a_image_folder, img_rows, img_cols
+from config import img_size, embedding_size, image_folder
 from model import build_model
+from utils import select_triplets
 
 if __name__ == '__main__':
     channel = 3
@@ -18,43 +19,36 @@ if __name__ == '__main__':
     model = build_model()
     model.load_weights(model_weights_path)
 
-    vocab = pickle.load(open('data/vocab_train.p', 'rb'))
-    idx2word = sorted(vocab)
-    word2idx = dict(zip(idx2word, range(len(vocab))))
+    samples = select_triplets('valid')
+    samples = random.sample(samples, 10)
 
-    print(model.summary())
-
-    encoded_test_a = pickle.load(open('data/encoded_test_a_images.p', 'rb'))
-
-    names = [f for f in encoded_test_a.keys()]
-
-    samples = random.sample(names, 20)
+    result = []
 
     for i in range(len(samples)):
-        image_name = samples[i]
-        filename = os.path.join(test_a_image_folder, image_name)
-        print('Start processing image: {}'.format(filename))
-        image_input = np.zeros((1, 2048))
-        image_input[0] = encoded_test_a[image_name]
+        sample = samples[i]
+        batch_inputs = np.empty((3, 1, img_size, img_size, channel), dtype=np.float32)
+        batch_dummy_target = np.zeros((1, embedding_size * 3), dtype=np.float32)
 
-        start_words = [start_word]
-        while True:
-            text_input = [word2idx[i] for i in start_words]
-            text_input = sequence.pad_sequences([text_input], maxlen=max_token_length, padding='post')
-            preds = model.predict([image_input, text_input])
-            # print('output.shape: ' + str(output.shape))
-            word_pred = idx2word[np.argmax(preds[0])]
-            start_words.append(word_pred)
-            if word_pred == stop_word or len(start_word) > max_token_length:
-                break
+        for j, role in enumerate(['a', 'p', 'n']):
+            image_name = sample[role]
+            filename = os.path.join(image_folder, image_name)
+            image_bgr = cv.imread(filename)
+            image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
+            image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
+            batch_inputs[j, 0] = preprocess_input(image_rgb)
+            cv.imwrite('images/{}_{}_image.png'.format(i, role), image_bgr)
 
-        sentence = ' '.join(start_words[1:-1])
-        print(sentence)
+        y_pred = model.predict(batch_inputs)
+        a = y_pred[0, 0:128]
+        p = y_pred[0, 128:256]
+        n = y_pred[0, 256:384]
 
-        img = cv.imread(filename)
-        img = cv.resize(img, (img_rows, img_cols), cv.INTER_CUBIC)
-        if not os.path.exists('images'):
-            os.makedirs('images')
-        cv.imwrite('images/{}_image.png'.format(i), img)
+        distance_a_p = np.linalg.norm(a - p) ** 2
+        distance_a_n = np.linalg.norm(a - n) ** 2
+
+        result.append({'distance_{}_a_p'.format(i): distance_a_p, 'distance_{}_a_n'.format(i): distance_a_n})
+
+    with open('result.json', 'w') as file:
+        json.dump(result, file, indent=4)
 
     K.clear_session()

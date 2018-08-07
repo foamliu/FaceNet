@@ -43,3 +43,4 @@ Download [pre-trained model](https://github.com/foamliu/Look-Into-Person/release
 ```bash
 $ python demo.py
 ```
+

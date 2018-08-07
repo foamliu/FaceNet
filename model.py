@@ -20,7 +20,7 @@ def build_model():
     input_p = Input((img_size, img_size, channel), name='positive')
     input_n = Input((img_size, img_size, channel), name='negtive')
 
-    normalize = Lambda(lambda x: x / tf.norm(x))
+    normalize = Lambda(lambda x: x / tf.norm(x), name='normalize')
 
     x = image_embedder(input_a)
     output_a = normalize(x)
