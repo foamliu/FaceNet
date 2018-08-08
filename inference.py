@@ -64,7 +64,7 @@ def inference():
         image_names_0 = (lines[3 * i].split(' ')[0].strip())
         image_names_1 = (lines[3 * i + 1].split(' ')[0].strip())
         image_names_2 = (lines[3 * i + 2].split(' ')[0].strip())
-        items.append((image_names_0, image_names_1, image_names_2, in_queue, out_queue))
+        items.append((image_names_0, image_names_1, image_names_2, out_queue))
 
     for _ in tqdm(pool.imap_unordered(inference_one_image, items), total=len(lines)):
         pass
