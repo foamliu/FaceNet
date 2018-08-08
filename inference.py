@@ -1,7 +1,10 @@
 # encoding=utf-8
+import os
+
+os.environ["CUDA_VISIBLE_DEVICES"] = ''
 import json
 import multiprocessing as mp
-import os
+
 from multiprocessing import Pool
 
 import cv2 as cv
@@ -15,7 +18,6 @@ from model import build_model
 
 def inference_one_image(item):
     image_name_0, image_name_1, image_name_2, out_queue = item
-    os.environ["CUDA_VISIBLE_DEVICES"] = ''
     model_weights_path = 'models/model.00-0.0296.hdf5'
     model = build_model()
     model.load_weights(model_weights_path)
@@ -79,4 +81,7 @@ def inference():
 
 
 if __name__ == '__main__':
-    inference()
+    import tensorflow as tf
+
+    with tf.device("/cpu:0"):
+        inference()
