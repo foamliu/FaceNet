@@ -12,15 +12,13 @@ from tqdm import tqdm
 from config import img_size, identity_annot_filename, image_folder, num_images
 from model import build_model
 
-os.environ["CUDA_VISIBLE_DEVICES"] = ''
-model_weights_path = 'models/model.00-0.0296.hdf5'
-model = build_model()
-model.load_weights(model_weights_path)
-
 
 def inference_one_image(item):
     image_name_0, image_name_1, image_name_2, out_queue = item
-
+    os.environ["CUDA_VISIBLE_DEVICES"] = ''
+    model_weights_path = 'models/model.00-0.0296.hdf5'
+    model = build_model()
+    model.load_weights(model_weights_path)
     filename = os.path.join(image_folder, image_name_0)
     image_bgr = cv.imread(filename)
     image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
