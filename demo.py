@@ -15,16 +15,19 @@ from utils import select_triplets
 if __name__ == '__main__':
     channel = 3
 
-    model_weights_path = 'models/model.00-0.1708.hdf5'
+    model_weights_path = 'models/model.17-0.1397.hdf5'
     model = build_model()
     model.load_weights(model_weights_path)
 
+    num_samples = 10
     samples = select_triplets('valid')
-    samples = random.sample(samples, 10)
+    samples = random.sample(samples, num_samples)
 
-    result = {}
+    a_list = []
+    p_list = []
+    n_list = []
 
-    for i in range(len(samples)):
+    for i in range(num_samples):
         sample = samples[i]
         batch_inputs = np.empty((3, 1, img_size, img_size, channel), dtype=np.float32)
         batch_dummy_target = np.zeros((1, embedding_size * 3), dtype=np.float32)
@@ -43,11 +46,35 @@ if __name__ == '__main__':
         p = y_pred[0, 128:256]
         n = y_pred[0, 256:384]
 
-        distance_a_p = np.linalg.norm(a - p) ** 2
-        distance_a_n = np.linalg.norm(a - n) ** 2
+        a_list.append(a)
+        p_list.append(p)
+        n_list.append(n)
+
+    result = {}
+
+    for i in range(num_samples):
+        a_i = a_list[i]
+        p_i = p_list[i]
+        n_i = n_list[i]
+
+        distance_a_p = np.linalg.norm(a_i - p_i) ** 2
+        distance_a_n = np.linalg.norm(a_i - n_i) ** 2
 
         result['distance_{}_a_p'.format(i)] = distance_a_p
         result['distance_{}_a_n'.format(i)] = distance_a_n
+
+        for j in range(num_samples):
+            a_j = a_list[j]
+            p_j = p_list[j]
+            n_j = n_list[j]
+
+            distance_i_j_a = np.linalg.norm(a_i - a_j) ** 2
+            distance_i_j_p = np.linalg.norm(p_i - p_j) ** 2
+            distance_i_j_n = np.linalg.norm(n_i - n_j) ** 2
+
+            result['distance_{}_{}_a'.format(i, j)] = distance_i_j_a
+            result['distance_{}_{}_p'.format(i, j)] = distance_i_j_p
+            result['distance_{}_{}_n'.format(i, j)] = distance_i_j_n
 
     with open('result.json', 'w') as file:
         json.dump(result, file, indent=4)

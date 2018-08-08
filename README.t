@@ -44,15 +44,24 @@ Download [pre-trained model](https://github.com/foamliu/Look-Into-Person/release
 $ python demo.py
 ```
 
-P | d | A | d | N |
+P | distance | A | distance | N |
 |---|---|---|---|---|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/0_p_image.png)|$(distance_0_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|$(distance_0_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
+|$(distance_0_1_p)|---|$(distance_0_1_a)|---|$(distance_0_1_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/1_p_image.png)|$(distance_1_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_a_image.png)|$(distance_1_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_n_image.png)|
+|$(distance_1_2_p)|---|$(distance_1_2_a)|---|$(distance_1_2_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/2_p_image.png)|$(distance_2_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_a_image.png)|$(distance_2_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_n_image.png)|
+|$(distance_2_3_p)|---|$(distance_2_3_a)|---|$(distance_2_3_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/3_p_image.png)|$(distance_3_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_a_image.png)|$(distance_3_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_n_image.png)|
+|$(distance_3_4_p)|---|$(distance_3_4_a)|---|$(distance_3_4_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/4_p_image.png)|$(distance_4_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_a_image.png)|$(distance_4_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_n_image.png)|
+|$(distance_4_5_p)|---|$(distance_4_5_a)|---|$(distance_4_5_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/5_p_image.png)|$(distance_5_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_a_image.png)|$(distance_5_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_n_image.png)|
+|$(distance_5_6_p)|---|$(distance_5_6_a)|---|$(distance_5_6_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/6_p_image.png)|$(distance_6_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_a_image.png)|$(distance_6_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_n_image.png)|
+|$(distance_6_7_p)|---|$(distance_6_7_a)|---|$(distance_6_7_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/7_p_image.png)|$(distance_7_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_a_image.png)|$(distance_7_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_n_image.png)|
+|$(distance_7_8_p)|---|$(distance_7_8_a)|---|$(distance_7_8_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/8_p_image.png)|$(distance_8_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_a_image.png)|$(distance_8_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_n_image.png)|
+|$(distance_8_9_p)|---|$(distance_8_9_a)|---|$(distance_8_9_n)|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/9_p_image.png)|$(distance_9_a_p)|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_a_image.png)|$(distance_9_a_n)|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_n_image.png)|
