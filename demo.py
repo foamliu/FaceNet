@@ -8,13 +8,11 @@ import keras.backend as K
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 
-from config import img_size, embedding_size, image_folder
+from config import img_size, channel, embedding_size, image_folder
 from model import build_model
 from utils import select_triplets
 
 if __name__ == '__main__':
-    channel = 3
-
     model_weights_path = 'models/model.00-0.0296.hdf5'
     model = build_model()
     model.load_weights(model_weights_path)

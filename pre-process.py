@@ -21,15 +21,12 @@ def check_one_image(line):
     if len(line) > 0:
         tokens = line.split(' ')
         image_name = tokens[0].strip()
-        bbox = bboxes[image_name]
-        x1, y1, w, h = bbox
         filename = os.path.join(image_folder, image_name)
         original = cv.imread(filename)
         try:
             resized = cv.resize(original, (img_size, img_size), cv.INTER_CUBIC)
         except cv.error as err:
             print(filename)
-            print('image_name={}: x1={}, y1={}, w={}, h={}'.format(image_name, x1, y1, w, h))
             print('image_name={} original.shape={}'.format(image_name, original.shape))
             print('image_name={} resized.shape={}'.format(image_name, resized.shape))
 
