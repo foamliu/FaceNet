@@ -50,6 +50,13 @@ if __name__ == '__main__':
         p_list.append(p)
         n_list.append(n)
 
+    with open('a_list.json', 'w') as file:
+        json.dump(a_list, file, indent=4)
+    with open('p_list.json', 'w') as file:
+        json.dump(p_list, file, indent=4)
+    with open('n_list.json', 'w') as file:
+        json.dump(n_list, file, indent=4)
+
     result = {}
 
     for i in range(num_samples):
