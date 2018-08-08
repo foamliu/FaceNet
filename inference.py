@@ -43,7 +43,7 @@ class InferenceWorker(Process):
                 except queue.Empty:
                     continue
 
-                image_name_0, image_name_1, image_name_2, out_queue = item
+                image_name_0, image_name_1, image_name_2 = item
 
                 filename = os.path.join(image_folder, image_name_0)
                 image_bgr = cv.imread(filename)
@@ -123,7 +123,7 @@ def run(gpuids, q):
         image_names_0 = (lines[3 * i].split(' ')[0].strip())
         image_names_1 = (lines[3 * i + 1].split(' ')[0].strip())
         image_names_2 = (lines[3 * i + 2].split(' ')[0].strip())
-        items.append((image_names_0, image_names_1, image_names_2, out_queue))
+        items.append((image_names_0, image_names_1, image_names_2))
 
     # init scheduler
     x = Scheduler(gpuids, q)
