@@ -71,9 +71,9 @@ class InferenceWorker(Process):
                 p = y_pred[0, 128:256]
                 n = y_pred[0, 256:384]
 
-                out_queue.put({'image_name': image_name_0, 'embedding': a})
-                out_queue.put({'image_name': image_name_1, 'embedding': p})
-                out_queue.put({'image_name': image_name_2, 'embedding': n})
+                self.out_queue.put({'image_name': image_name_0, 'embedding': a})
+                self.out_queue.put({'image_name': image_name_1, 'embedding': p})
+                self.out_queue.put({'image_name': image_name_2, 'embedding': n})
                 if self.in_queue.qsize() == 0:
                     break
             except Exception as e:
