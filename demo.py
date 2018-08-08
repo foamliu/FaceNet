@@ -51,11 +51,11 @@ if __name__ == '__main__':
         n_list[i] = n
 
     with open('a_list.json', 'w') as file:
-        json.dump(a_list, file, indent=4)
+        json.dump(a_list.tolist(), file, indent=4)
     with open('p_list.json', 'w') as file:
-        json.dump(p_list, file, indent=4)
+        json.dump(p_list.tolist(), file, indent=4)
     with open('n_list.json', 'w') as file:
-        json.dump(n_list, file, indent=4)
+        json.dump(n_list.tolist(), file, indent=4)
 
     result = {}
 
