@@ -136,7 +136,7 @@ SENTINEL = 1
 
 
 def listener(q):
-    pbar = tqdm(total=30000)
+    pbar = tqdm(total=num_images)
     for item in iter(q.get, None):
         pbar.update()
 
