@@ -33,16 +33,6 @@ def draw_str(dst, target, s):
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
 
 
-def triplet_loss(y_true, y_pred):
-    a_pred = y_pred[:, 0:128]
-    p_pred = y_pred[:, 128:256]
-    n_pred = y_pred[:, 256:384]
-    loss = K.mean(
-        K.square(tf.norm(a_pred - p_pred, ord='euclidean', axis=-1)) - K.square(
-            tf.norm(a_pred - n_pred, ord='euclidean', axis=-1)) + alpha)
-    return loss
-
-
 def get_bbox():
     with open(bbox_annot_filename, 'r') as file:
         lines = file.readlines()
@@ -86,6 +76,16 @@ def get_indices():
                 id2images[id] = [image_name]
 
     return list(ids), images, image2id, id2images
+
+
+def triplet_loss(y_true, y_pred):
+    a_pred = y_pred[:, 0:128]
+    p_pred = y_pred[:, 128:256]
+    n_pred = y_pred[:, 256:384]
+    positive_distance = K.square(tf.norm(a_pred - p_pred, axis=-1))
+    negative_distance = K.square(tf.norm(a_pred - n_pred, axis=-1))
+    loss = K.mean(K.maximum(0.0, positive_distance - negative_distance + alpha))
+    return loss
 
 
 def select_triplets(usage):
