@@ -18,6 +18,7 @@ model.load_weights(model_weights_path)
 
 
 def inference_one_image(item):
+    os.environ["CUDA_VISIBLE_DEVICES"] = ''
     image_name_0, image_name_1, image_name_2, out_queue = item
 
     filename = os.path.join(image_folder, image_name_0)
