@@ -23,9 +23,9 @@ if __name__ == '__main__':
     samples = select_triplets('valid')
     samples = random.sample(samples, num_samples)
 
-    a_list = []
-    p_list = []
-    n_list = []
+    a_list = np.empty((10, 128), dtype=np.float32)
+    p_list = np.empty((10, 128), dtype=np.float32)
+    n_list = np.empty((10, 128), dtype=np.float32)
 
     for i in range(num_samples):
         sample = samples[i]
@@ -46,9 +46,9 @@ if __name__ == '__main__':
         p = y_pred[0, 128:256]
         n = y_pred[0, 256:384]
 
-        a_list.append(a)
-        p_list.append(p)
-        n_list.append(n)
+        a_list[i] = a
+        p_list[i] = p
+        n_list[i] = n
 
     with open('a_list.json', 'w') as file:
         json.dump(a_list, file, indent=4)
