@@ -169,3 +169,11 @@ def get_pairs():
             pairs.append({'image_name_1': image_name_1, 'image_name_2': image_name_2, 'same_person': False})
 
     return pairs
+
+
+def get_latest_model():
+    import glob
+    import os
+    files = glob.glob('models/*.hdf5')
+    files.sort(key=os.path.getmtime)
+    return files[-1]
