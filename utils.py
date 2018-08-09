@@ -126,10 +126,11 @@ def select_train_triplets():
         embeddings = pickle.load(file)
 
     ids, images, image2id, id2images = get_indices()
+    train_images = images[num_train_samples:]
     num_batches = num_train_samples // batch_size
     train_triplets = []
     for _ in tqdm(range(num_batches)):
-        cache = sorted(random.sample(embeddings, cache_size))
+        cache = sorted(random.sample(train_images, cache_size))
         distance_mat = np.empty(shape=(cache_size, cache_size), dtype=np.float32)
         for i in range(cache_size):
             for j in range(cache_size):
