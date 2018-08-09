@@ -3,6 +3,7 @@ import argparse
 import keras
 import tensorflow as tf
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
+from keras.models import load_model
 from keras.utils import multi_gpu_model
 
 from config import patience, epochs, num_train_samples, num_valid_samples, batch_size
@@ -24,7 +25,7 @@ if __name__ == '__main__':
     model_names = checkpoint_models_path + 'model.{epoch:02d}-{val_loss:.4f}.hdf5'
     model_checkpoint = ModelCheckpoint(model_names, monitor='val_loss', verbose=1, save_best_only=True)
     early_stop = EarlyStopping('val_loss', patience=patience)
-    reduce_lr = ReduceLROnPlateau('val_loss', factor=0.1, patience=int(patience / 4), verbose=1)
+    reduce_lr = ReduceLROnPlateau('val_loss', factor=0.5, patience=int(patience / 2), verbose=1)
 
 
     class MyCbk(keras.callbacks.Callback):
@@ -41,17 +42,19 @@ if __name__ == '__main__':
     num_gpu = len(get_available_gpus())
     if num_gpu >= 2:
         with tf.device("/cpu:0"):
-            model = build_model()
             if pretrained_path is not None:
-                model.load_weights(pretrained_path)
+                model = load_model(pretrained_path)
+            else:
+                model = build_model()
 
         new_model = multi_gpu_model(model, gpus=num_gpu)
         # rewrite the callback: saving through the original model and not the multi-gpu model.
         model_checkpoint = MyCbk(model)
     else:
-        new_model = build_model()
         if pretrained_path is not None:
-            new_model.load_weights(pretrained_path)
+            new_model = load_model(pretrained_path)
+        else:
+            new_model = build_model()
 
     adam = keras.optimizers.Adam(lr=0.05)
     new_model.compile(optimizer='adam', loss=triplet_loss)
