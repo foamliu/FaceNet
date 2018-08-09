@@ -2,7 +2,6 @@ import multiprocessing as mp
 import os
 import pickle
 import queue
-from multiprocessing import Pool
 from multiprocessing import Process
 from multiprocessing import Process
 
@@ -170,5 +169,5 @@ if __name__ == '__main__':
 
     train_triplets = select_train_triplets()
     print(len(train_triplets))
-
-
+    with open('data/train_triplets.p', 'wb') as file:
+        pickle.dump(train_triplets, file)
