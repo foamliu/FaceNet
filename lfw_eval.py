@@ -1,15 +1,17 @@
-import hashlib
-import json
 import multiprocessing as mp
 import os
 import pickle
-import sys
+import queue
+from multiprocessing import Process
 from multiprocessing import Process
 
+import cv2 as cv
 import numpy as np
+from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import best_model, lfw_folder
+from config import best_model, lfw_folder, img_size, channel
+from utils import get_lfw_images
 
 
 class InferenceWorker(Process):
@@ -35,13 +37,35 @@ class InferenceWorker(Process):
 
         while True:
             try:
+                sample = {}
+                try:
+                    sample['a'] = self.in_queue.get(block=False)
+                    sample['p'] = self.in_queue.get(block=False)
+                    sample['n'] = self.in_queue.get(block=False)
 
-                self.out_queue.put({'image_name': image_name, 'candidate': candidate})
+                except queue.Empty:
+                    continue
+
+                batch_inputs = np.empty((3, 1, img_size, img_size, channel), dtype=np.float32)
+
+                for j, role in enumerate(['a', 'p', 'n']):
+                    image_name = sample[role]
+                    filename = os.path.join(lfw_folder, image_name)
+                    image_bgr = cv.imread(filename)
+                    image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
+                    image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
+                    batch_inputs[j, 0] = preprocess_input(image_rgb)
+                    cv.imwrite('images/{}_{}_image.png'.format(i, role), image_bgr)
+
+                y_pred = model.predict([batch_inputs[0], batch_inputs[1], batch_inputs[2]])
+                a = y_pred[0, 0:128]
+                p = y_pred[0, 128:256]
+                n = y_pred[0, 256:384]
+
+                self.out_queue.put({'image_name': sample['a'], 'embedding': a})
+                self.out_queue.put({'image_name': sample['p'], 'embedding': p})
+                self.out_queue.put({'image_name': sample['n'], 'embedding': n})
                 self.signal_queue.put(SENTINEL)
-
-                if num_done % 1000 == 0:
-                    with open("data/preds_{}.p".format(num_done), "wb") as file:
-                        pickle.dump(self.out_queue, file)
 
                 if self.in_queue.qsize() == 0:
                     break
@@ -85,7 +109,7 @@ class Scheduler:
 
 def run(gpuids, q):
     # scan all files under img_path
-    names = [f for f in encoded_test_a.keys()]
+    names = get_lfw_images()
 
     # init scheduler
     x = Scheduler(gpuids, q)
@@ -98,7 +122,7 @@ SENTINEL = 1
 
 
 def listener(q):
-    pbar = tqdm(total=30000)
+    pbar = tqdm(total=13233)
     for item in iter(q.get, None):
         pbar.update()
 
