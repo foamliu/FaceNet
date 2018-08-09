@@ -152,7 +152,7 @@ def update_train_embeddings():
 def calc_distance_list(image_i):
     embedding_i = embeddings[image_i]
     distance_list = np.empty(shape=(num_train_samples,), dtype=np.float32)
-    for j, image_j in enumerate(train_images):
+    for j, image_j in enumerate(get_train_images()):
         embedding_j = embeddings[image_j]
         dist = np.square(np.linalg.norm(embedding_i - embedding_j))
         distance_list[j] = dist
