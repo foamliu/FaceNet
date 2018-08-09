@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import best_model, image_folder, img_size, channel
+from config import best_model, image_folder, img_size, channel, num_valid_samples
 from utils import select_triplets
 
 
@@ -118,7 +118,7 @@ SENTINEL = 1
 
 
 def listener(q):
-    pbar = tqdm(total=13233 // 3)
+    pbar = tqdm(total=num_valid_samples)
     for item in iter(q.get, None):
         pbar.update()
 
@@ -150,7 +150,7 @@ if __name__ == '__main__':
     with open('data/valid.p', 'rb') as file:
         samples = pickle.load(file)
 
-    for threshold in np.arrange(0.4, 1.2, 0.05):
+    for threshold in np.arange(0.4, 1.2, 0.05):
 
         print('threshold: ' + str(threshold))
 
