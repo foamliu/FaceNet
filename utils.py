@@ -99,7 +99,7 @@ def get_valid_triplets():
     return data_set
 
 
-def select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat):
+def select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat, train_images):
     a_id = image2id[a_image]
     while len(id2images[a_id]) <= 2:
         a_image = random.choice(cache)
@@ -107,7 +107,7 @@ def select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_m
     a_index = cache.index(a_image)
     # choose p_image
     p_image = random.choice(id2images[a_id])
-    while p_image == a_image:
+    while p_image == a_image or p_image not in train_images:
         p_image = random.choice(id2images[a_id])
     embedding_a = embeddings[a_image]
     embedding_p = embeddings[p_image]
@@ -142,7 +142,8 @@ def select_train_triplets():
         for j in range(batch_size):
             # choose a_image
             a_image = random.choice(cache)
-            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat)
+            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat,
+                                                train_images)
             while n_image is None:
                 a_image = random.choice(cache)
                 p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat)
