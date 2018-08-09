@@ -158,7 +158,7 @@ if __name__ == "__main__":
     y_true_list = []
     y_pred_list = []
 
-    for pair in pairs:
+    for pair in tqdm(pairs):
         image_name_1 = pair['image_name_1']
         image_name_2 = pair['image_name_2']
         y_true = pair['same_person']
@@ -173,5 +173,8 @@ if __name__ == "__main__":
     pred = np.array(y_pred_list).astype(np.int32)
     from sklearn import metrics
 
-    fpr, tpr, thresholds = metrics.roc_curve(y, pred, pos_label=2)
+    print(y)
+    print(pred)
+
+    fpr, tpr, thresholds = metrics.roc_curve(y, pred)
     print(metrics.auc(fpr, tpr))
