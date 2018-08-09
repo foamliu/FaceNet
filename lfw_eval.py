@@ -11,7 +11,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import best_model, lfw_folder, img_size, channel
-from utils import get_lfw_images
+from utils import get_lfw_images, get_pairs
 
 
 class InferenceWorker(Process):
@@ -151,8 +151,27 @@ def inference():
 if __name__ == "__main__":
     if not os.path.isfile('data/preds.p'):
         inference()
-
-
-
     with open('data/preds.p', 'rb') as file:
-        data = pickle.load(file)
+        embeddings = pickle.load(file)
+
+    pairs = get_pairs()
+    y_true_list = []
+    y_pred_list = []
+
+    for pair in pairs:
+        image_name_1 = pairs['image_name_1']
+        image_name_2 = pairs['image_name_2']
+        y_true = pairs['same_person']
+        y_true_list.append(y_true)
+        embedding_1 = np.array([x['embedding'] for x in embeddings if x['image_name'] == image_name_1][0])
+        embedding_2 = np.array([x['embedding'] for x in embeddings if x['image_name'] == image_name_2][0])
+        dist = np.square(np.linalg.norm(embedding_1 - embedding_2))
+        y_pred = dist <= 1.0
+        y_pred_list.append(y_pred)
+
+    y = np.array(y_true_list)
+    pred = np.array(y_pred_list)
+    from sklearn import metrics
+
+    fpr, tpr, thresholds = metrics.roc_curve(y, pred, pos_label=2)
+    print(metrics.auc(fpr, tpr))
