@@ -166,7 +166,7 @@ if __name__ == "__main__":
         embedding_1 = np.array([x['embedding'] for x in embeddings if x['image_name'] == image_name_1][0])
         embedding_2 = np.array([x['embedding'] for x in embeddings if x['image_name'] == image_name_2][0])
         dist = np.square(np.linalg.norm(embedding_1 - embedding_2))
-        y_pred = dist <= 1.0
+        y_pred = dist <= 1.1
         y_pred_list.append(y_pred)
 
     y = np.array(y_true_list).astype(np.int32)
