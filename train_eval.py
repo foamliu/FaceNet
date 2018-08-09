@@ -10,8 +10,8 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import best_model, image_folder, img_size, channel, num_train_samples
-from utils import select_triplets, get_latest_model
+from config import image_folder, img_size, channel, num_train_samples
+from utils import get_latest_model, get_train_images
 
 
 class InferenceWorker(Process):
@@ -37,8 +37,11 @@ class InferenceWorker(Process):
 
         while True:
             try:
+                sample = {}
                 try:
-                    sample = self.in_queue.get(block=False)
+                    sample['a'] = self.in_queue.get(block=False)
+                    sample['p'] = self.in_queue.get(block=False)
+                    sample['n'] = self.in_queue.get(block=False)
                 except queue.Empty:
                     continue
 
@@ -57,9 +60,9 @@ class InferenceWorker(Process):
                 p = y_pred[0, 128:256]
                 n = y_pred[0, 256:384]
 
-                self.out_queue.put(
-                    {'image_name_a': sample['a'], 'embedding_a': a, 'image_name_p': sample['p'], 'embedding_p': p,
-                     'image_name_n': sample['n'], 'embedding_n': n})
+                self.out_queue.put({'image_name': sample['a'], 'embedding': a})
+                self.out_queue.put({'image_name': sample['p'], 'embedding': p})
+                self.out_queue.put({'image_name': sample['n'], 'embedding': n})
                 self.signal_queue.put(SENTINEL)
 
                 if self.in_queue.qsize() == 0:
@@ -87,10 +90,10 @@ class Scheduler:
         for gpuid in self._gpuids:
             self._workers.append(InferenceWorker(gpuid, self.in_queue, self.out_queue, self.signal_queue))
 
-    def start(self, samples):
+    def start(self, names):
         # put all of image names into queue
-        for sample in samples:
-            self.in_queue.put(sample)
+        for name in names:
+            self.in_queue.put(name)
 
         # start the workers
         for worker in self._workers:
@@ -105,20 +108,20 @@ class Scheduler:
 
 def run(gpuids, q):
     # scan all files under img_path
-    samples = select_triplets('train')
+    names = get_train_images()
 
     # init scheduler
     x = Scheduler(gpuids, q)
 
     # start processing and wait for complete
-    return x.start(samples)
+    return x.start(names)
 
 
 SENTINEL = 1
 
 
 def listener(q):
-    pbar = tqdm(total=num_train_samples)
+    pbar = tqdm(total=num_train_samples // 3)
     for item in iter(q.get, None):
         pbar.update()
 

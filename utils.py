@@ -143,6 +143,11 @@ def get_lfw_images():
     return names
 
 
+def get_train_images():
+    _, images, _, _ = get_indices()
+    return images[:num_train_samples]
+
+
 def get_pairs():
     with open('data/pairs.txt', 'r') as file:
         lines = file.readlines()
