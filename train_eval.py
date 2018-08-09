@@ -2,6 +2,7 @@ import multiprocessing as mp
 import os
 import pickle
 import queue
+from multiprocessing import Pool
 from multiprocessing import Process
 from multiprocessing import Process
 
@@ -148,22 +149,30 @@ def update_train_embeddings():
     proc.join()
 
 
+def calc_distance_list(image_i):
+    embedding_i = embeddings[image_i]
+    distance_list = np.empty(shape=(num_train_samples,), dtype=np.float32)
+    for j, image_j in enumerate(train_images):
+        embedding_j = embeddings[image_j]
+        dist = np.square(np.linalg.norm(embedding_i - embedding_j))
+        distance_list[j] = dist
+    return distance_list
+
+
 if __name__ == '__main__':
     if not os.path.isfile('data/train_embeddings.p'):
         update_train_embeddings()
     with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
-    distance = np.empty(shape=(num_train_samples, num_train_samples), dtype=np.float32)
+    distance_mat = np.empty(shape=(num_train_samples, num_train_samples), dtype=np.float32)
 
+    pool = Pool(24)
     train_images = get_train_images()
+    result = list(tqdm.tqdm(pool.imap(calc_distance_list, train_images), total=num_train_samples))
 
-    for i, image_i in tqdm(enumerate(train_images)):
-        for j, image_j in enumerate(train_images):
-            embedding_i = embeddings[image_i]
-            embedding_j = embeddings[image_j]
-            dist = np.square(np.linalg.norm(embedding_i - embedding_j))
-            distance[i, j] = dist
+    for i in result:
+        distance_mat[i] = result[i]
 
     with open("data/train_embeddings.p", "wb") as file:
-        pickle.dump(distance.tolist(), file)
+        pickle.dump(distance_mat.tolist(), file)
