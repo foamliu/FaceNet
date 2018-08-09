@@ -159,9 +159,9 @@ if __name__ == "__main__":
     y_pred_list = []
 
     for pair in pairs:
-        image_name_1 = pairs['image_name_1']
-        image_name_2 = pairs['image_name_2']
-        y_true = pairs['same_person']
+        image_name_1 = pair['image_name_1']
+        image_name_2 = pair['image_name_2']
+        y_true = pair['same_person']
         y_true_list.append(y_true)
         embedding_1 = np.array([x['embedding'] for x in embeddings if x['image_name'] == image_name_1][0])
         embedding_2 = np.array([x['embedding'] for x in embeddings if x['image_name'] == image_name_2][0])
