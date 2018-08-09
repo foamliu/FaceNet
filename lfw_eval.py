@@ -79,6 +79,7 @@ class InferenceWorker(Process):
 class Scheduler:
     def __init__(self, gpuids, signal_queue):
         self.signal_queue = signal_queue
+        manager = mp.Manager()
         self.in_queue = manager.Queue()
         self.out_queue = manager.Queue()
         self._gpuids = gpuids
@@ -126,7 +127,7 @@ def listener(q):
         pbar.update()
 
 
-if __name__ == "__main__":
+def inference():
     gpuids = ['0', '1', '2', '3']
     print(gpuids)
 
@@ -145,3 +146,13 @@ if __name__ == "__main__":
 
     q.put(None)
     proc.join()
+
+
+if __name__ == "__main__":
+    if not os.path.isfile('data/preds.p'):
+        inference()
+
+
+
+    with open('data/preds.p', 'rb') as file:
+        data = pickle.load(file)

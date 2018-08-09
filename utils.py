@@ -132,7 +132,7 @@ def get_lfw_images():
         if len(tokens) > 1:
             person_name = tokens[0]
             count = int(tokens[1])
-            for j in range(1, count+1):
+            for j in range(1, count + 1):
                 name = '{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4))
                 filename = os.path.join('data/lfw_funneled/', name)
                 if os.path.isfile(filename):
@@ -141,3 +141,31 @@ def get_lfw_images():
                     print(filename)
 
     return names
+
+
+def get_pairs():
+    with open('data/pairs.txt', 'r') as file:
+        lines = file.readlines()
+
+    pairs = []
+
+    for i in (range(1, len(lines))):
+        line = lines[i].strip()
+        tokens = line.split()
+        if len(tokens) == 3:
+            person_name = tokens[0]
+            id1 = int(tokens[1])
+            id2 = int(tokens[2])
+            image_name_1 = '{0}/{0}_{1}.jpg'.format(person_name, str(id1).zfill(4))
+            image_name_2 = '{0}/{0}_{1}.jpg'.format(person_name, str(id2).zfill(4))
+            pairs.append({'image_name_1': image_name_1, 'image_name_2': image_name_2, 'same_person': True})
+        elif len(tokens) == 4:
+            person_name_1 = tokens[0]
+            id1 = int(tokens[1])
+            person_name_2 = tokens[2]
+            id2 = int(tokens[3])
+            image_name_1 = '{0}/{0}_{1}.jpg'.format(person_name_1, str(id1).zfill(4))
+            image_name_2 = '{0}/{0}_{1}.jpg'.format(person_name_2, str(id2).zfill(4))
+            pairs.append({'image_name_1': image_name_1, 'image_name_2': image_name_2, 'same_person': False})
+
+    return pairs
