@@ -15,7 +15,7 @@ class DataGenSequence(Sequence):
     def __init__(self, usage):
         self.usage = usage
         if self.usage == 'train':
-            update_train_embeddings()
+            # update_train_embeddings()
             self.samples = select_train_triplets()
         else:
             self.samples = get_valid_triplets()
@@ -46,7 +46,7 @@ class DataGenSequence(Sequence):
 
     def on_epoch_end(self):
         if self.usage == 'train':
-            update_train_embeddings()
+            # update_train_embeddings()
             self.samples = select_train_triplets()
         else:
             self.samples = get_valid_triplets()
