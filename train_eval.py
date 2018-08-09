@@ -169,7 +169,7 @@ if __name__ == '__main__':
 
     pool = Pool(24)
     train_images = get_train_images()
-    result = list(tqdm.tqdm(pool.imap(calc_distance_list, train_images), total=num_train_samples))
+    result = list(tqdm(pool.imap(calc_distance_list, train_images), total=num_train_samples))
 
     for i in result:
         distance_mat[i] = result[i]
