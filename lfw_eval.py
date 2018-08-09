@@ -121,7 +121,7 @@ SENTINEL = 1
 
 
 def listener(q):
-    pbar = tqdm(total=13233)
+    pbar = tqdm(total=13233 // 3)
     for item in iter(q.get, None):
         pbar.update()
 
