@@ -1,4 +1,4 @@
-img_size = 139
+img_size = 227
 channel = 3
 batch_size = 256
 epochs = 10000
