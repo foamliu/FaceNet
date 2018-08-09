@@ -149,10 +149,13 @@ def update_train_embeddings():
     proc.join()
 
 
+train_images = get_train_images()
+
+
 def calc_distance_list(image_i):
     embedding_i = embeddings[image_i]
     distance_list = np.empty(shape=(num_train_samples,), dtype=np.float32)
-    for j, image_j in enumerate(get_train_images()):
+    for j, image_j in enumerate(train_images):
         embedding_j = embeddings[image_j]
         dist = np.square(np.linalg.norm(embedding_i - embedding_j))
         distance_list[j] = dist
@@ -168,7 +171,7 @@ if __name__ == '__main__':
     distance_mat = np.empty(shape=(num_train_samples, num_train_samples), dtype=np.float32)
 
     pool = Pool(24)
-    train_images = get_train_images()
+
     result = list(tqdm(pool.imap(calc_distance_list, train_images), total=num_train_samples))
 
     for i in result:
