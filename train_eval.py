@@ -12,7 +12,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import image_folder, img_size, channel, num_train_samples
-from utils import get_latest_model, get_train_images
+from utils import get_latest_model, get_train_images, select_train_triplets
 
 
 class InferenceWorker(Process):
@@ -168,14 +168,7 @@ if __name__ == '__main__':
     with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
-    distance_mat = np.empty(shape=(num_train_samples, num_train_samples), dtype=np.float32)
+    train_triplets = select_train_triplets()
+    print(len(train_triplets))
 
-    pool = Pool(24)
 
-    result = list(tqdm(pool.imap(calc_distance_list, train_images), total=num_train_samples))
-
-    for i in result:
-        distance_mat[i] = result[i]
-
-    with open("data/train_embeddings.p", "wb") as file:
-        pickle.dump(distance_mat.tolist(), file)

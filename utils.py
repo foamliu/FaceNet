@@ -5,11 +5,12 @@ import random
 
 import cv2 as cv
 import keras.backend as K
+import numpy as np
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples
+from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples, cache_size, batch_size
 
 
 def ensure_folder(folder):
@@ -98,9 +99,54 @@ def get_valid_triplets():
     return data_set
 
 
+def select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat):
+    a_id = image2id[a_image]
+    while len(id2images[a_id]) <= 2:
+        a_image = random.choice(cache)
+        a_id = image2id[a_image]
+    a_index = cache.index(a_image)
+    # choose p_image
+    p_image = random.choice(id2images[a_id])
+    while p_image == a_image:
+        p_image = random.choice(id2images[a_id])
+    embedding_a = embeddings[a_image]
+    embedding_p = embeddings[p_image]
+    distance_a_p = np.square(np.linalg.norm(embedding_a - embedding_p))
+    n_candidates = [q for q in range(cache_size) if
+                    distance_mat[a_index, q] <= distance_a_p + alpha and distance_mat[
+                        a_index, q] > distance_a_p and image2id[cache[q]] != a_id]
+    if len(n_candidates) > 0:
+        return p_image, n_candidates[0]
+    else:
+        return p_image, None
+
+
 def select_train_triplets():
-    with open('data/train.p', 'rb') as file:
+    with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
+
+    ids, images, image2id, id2images = get_indices()
+    num_batches = num_train_samples // batch_size
+    train_triplets = []
+    for _ in tqdm(range(num_batches)):
+        cache = sorted(random.sample(embeddings, cache_size))
+        distance_mat = np.empty(shape=(cache_size, cache_size), dtype=np.float32)
+        for i in range(cache_size):
+            for j in range(cache_size):
+                embedding_i = embeddings[cache[i]]
+                embedding_j = embeddings[cache[j]]
+                dist = np.square(np.linalg.norm(embedding_i - embedding_j))
+                distance_mat[i, j] = dist
+
+        for j in range(batch_size):
+            # choose a_image
+            a_image = random.choice(cache)
+            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat)
+            while n_image is None:
+                a_image = random.choice(cache)
+                p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat)
+            train_triplets.append({'a': a_image, 'p': p_image, 'n': n_image})
+    return train_triplets
 
 
 def get_train_images():

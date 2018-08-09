@@ -4,6 +4,7 @@ batch_size = 256
 epochs = 10000
 patience = 10
 embedding_size = 128
+cache_size = 1000
 num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
