@@ -126,7 +126,7 @@ def select_train_triplets():
         embeddings = pickle.load(file)
 
     ids, images, image2id, id2images = get_indices()
-    train_images = images[num_train_samples:]
+    train_images = images[:num_train_samples]
     num_batches = num_train_samples // batch_size
     train_triplets = []
     for _ in tqdm(range(num_batches)):
