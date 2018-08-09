@@ -55,7 +55,6 @@ class InferenceWorker(Process):
                     image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
                     image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
                     batch_inputs[j, 0] = preprocess_input(image_rgb)
-                    cv.imwrite('images/{}_{}_image.png'.format(i, role), image_bgr)
 
                 y_pred = model.predict([batch_inputs[0], batch_inputs[1], batch_inputs[2]])
                 a = y_pred[0, 0:128]
