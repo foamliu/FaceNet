@@ -65,3 +65,22 @@ P | distance | A | distance | N |
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/8_p_image.png)|0.9798|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_a_image.png)|2.2034|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_n_image.png)|
 |2.5072|---|1.8167|---|0.8505|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/9_p_image.png)|0.1785|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_a_image.png)|1.0298|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_n_image.png)|
+
+### Evaluation
+
+Labeled Faces in the Wild (LFW) database info:
+
+- 13233 images
+- 5749 people
+- 1680 people with two or more images
+
+Download the [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-deepfunneled.tgz) and put it under data folder:
+
+```bash
+$ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz
+$ tar -xvf lfw-funneled.tgz
+$ wget http://vis-www.cs.umass.edu/lfw/pairs.txt
+$ wget http://vis-www.cs.umass.edu/lfw/people.txt
+
+$ python lfw_eval.py
+```
