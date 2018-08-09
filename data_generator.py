@@ -8,18 +8,17 @@ from keras.utils import Sequence
 
 from config import batch_size, img_size, channel, embedding_size, image_folder
 from train_eval import update_train_embeddings
-from utils import select_train_triplets, get_valid_triplets, num_train_samples, num_valid_samples
+from utils import select_train_triplets, get_valid_triplets
 
 
 class DataGenSequence(Sequence):
     def __init__(self, usage):
         self.usage = usage
-        if usage == 'train':
+        if self.usage == 'train':
             update_train_embeddings()
-            self.num_samples = num_train_samples
+            self.samples = select_train_triplets()
         else:
             self.samples = get_valid_triplets()
-            self.num_samples = num_valid_samples
 
     def __len__(self):
         return int(np.ceil(len(self.samples) / float(batch_size)))
@@ -48,6 +47,7 @@ class DataGenSequence(Sequence):
     def on_epoch_end(self):
         if self.usage == 'train':
             update_train_embeddings()
+            self.samples = select_train_triplets()
         else:
             self.samples = get_valid_triplets()
 

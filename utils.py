@@ -141,7 +141,7 @@ def select_one_batch(param):
                                             train_images)
         while n_image is None:
             a_image = random.choice(cache)
-            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat)
+            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat, train_images)
         batch_triplets.append({'a': a_image, 'p': p_image, 'n': n_image})
     return batch_triplets
 
