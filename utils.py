@@ -128,9 +128,8 @@ def get_lfw_images():
 
     for i in (range(2, len(lines))):
         line = lines[i].strip()
-        print(line)
-        if len(line) > 0:
-            tokens = line.split()
+        tokens = line.split()
+        if len(tokens) > 1:
             person_name = tokens[0]
             count = int(tokens[1])
             for j in range(count):
