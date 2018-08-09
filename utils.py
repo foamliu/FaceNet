@@ -133,6 +133,10 @@ def get_lfw_images():
             person_name = tokens[0]
             count = int(tokens[1])
             for j in range(count):
-                names.append('{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4)))
+                name = '{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4))
+                if os.path.isfile(name):
+                    names.append(name)
+                else:
+                    print(name)
 
     return names
