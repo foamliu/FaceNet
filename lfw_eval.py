@@ -169,8 +169,8 @@ if __name__ == "__main__":
         y_pred = dist <= 1.0
         y_pred_list.append(y_pred)
 
-    y = np.array(y_true_list)
-    pred = np.array(y_pred_list)
+    y = np.array(y_true_list).astype(np.int32)
+    pred = np.array(y_pred_list).astype(np.int32)
     from sklearn import metrics
 
     fpr, tpr, thresholds = metrics.roc_curve(y, pred, pos_label=2)
