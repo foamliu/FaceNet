@@ -118,3 +118,20 @@ def select_triplets(usage):
         data_set.append({'a': a_image, 'p': p_image, 'n': n_image})
 
     return data_set
+
+
+def get_lfw_images():
+    with open('data/people.txt', 'r') as file:
+        lines = file.readlines()
+
+    names = []
+
+    for i in (range(2, len(lines))):
+        line = lines[i]
+        tokens = line.split()
+        person_name = tokens[0]
+        count = int(tokens[1])
+        for j in range(count):
+            names.append('{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4)))
+
+    return names
