@@ -127,11 +127,12 @@ def get_lfw_images():
     names = []
 
     for i in (range(2, len(lines))):
-        line = lines[i]
-        tokens = line.split()
-        person_name = tokens[0]
-        count = int(tokens[1])
-        for j in range(count):
-            names.append('{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4)))
+        line = lines[i].strip()
+        if len(line) > 0:
+            tokens = line.split()
+            person_name = tokens[0]
+            count = int(tokens[1])
+            for j in range(count):
+                names.append('{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4)))
 
     return names
