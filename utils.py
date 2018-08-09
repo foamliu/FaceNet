@@ -1,5 +1,6 @@
 import multiprocessing
 import os
+import pickle
 import random
 
 import cv2 as cv
@@ -8,7 +9,7 @@ import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, bbox_annot_filename, num_train_samples, num_valid_samples
+from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples
 
 
 def ensure_folder(folder):
@@ -31,25 +32,6 @@ def draw_str(dst, target, s):
     x, y = target
     cv.putText(dst, s, (x + 1, y + 1), cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), thickness=2, lineType=cv.LINE_AA)
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
-
-
-def get_bbox():
-    with open(bbox_annot_filename, 'r') as file:
-        lines = file.readlines()
-
-    image2bbox = {}
-    for i in range(2, len(lines)):
-        line = lines[i]
-        line = line.strip()
-        if len(line) > 0:
-            tokens = line.split()
-            image_name = tokens[0]
-            x_1 = int(tokens[1])
-            y_1 = int(tokens[2])
-            width = int(tokens[3])
-            height = int(tokens[4])
-            image2bbox[image_name] = (x_1, y_1, width, height)
-    return image2bbox
 
 
 def get_indices():
@@ -88,14 +70,10 @@ def triplet_loss(y_true, y_pred):
     return loss
 
 
-def select_triplets(usage):
+def get_valid_triplets():
     ids, images, image2id, id2images = get_indices()
-    if usage == 'train':
-        num_samples = num_train_samples
-        images = images[:num_train_samples]
-    else:
-        num_samples = num_valid_samples
-        images = images[num_train_samples:]
+    num_samples = num_valid_samples
+    images = images[num_train_samples:]
 
     data_set = []
 
@@ -120,6 +98,16 @@ def select_triplets(usage):
     return data_set
 
 
+def select_train_triplets():
+    with open('data/train.p', 'rb') as file:
+        embeddings = pickle.load(file)
+
+
+def get_train_images():
+    _, images, _, _ = get_indices()
+    return sorted(images[:num_train_samples])
+
+
 def get_lfw_images():
     with open('data/people.txt', 'r') as file:
         lines = file.readlines()
@@ -141,11 +129,6 @@ def get_lfw_images():
                     print(filename)
 
     return names
-
-
-def get_train_images():
-    _, images, _, _ = get_indices()
-    return images[:num_train_samples]
 
 
 def get_pairs():

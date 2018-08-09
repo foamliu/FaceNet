@@ -126,7 +126,7 @@ def listener(q):
         pbar.update()
 
 
-def inference():
+def update_train_embeddings():
     gpuids = ['0', '1', '2', '3']
     print(gpuids)
 
@@ -136,48 +136,34 @@ def inference():
     proc.start()
 
     out_queue = run(gpuids, q)
-    out_list = []
+    out_dict = {}
     while out_queue.qsize() > 0:
-        out_list.append(out_queue.get())
+        item = out_queue.get()
+        out_dict[item['image_name']] = item['embedding']
 
-    with open("data/valid.p", "wb") as file:
-        pickle.dump(out_list, file)
+    with open("data/train_embeddings.p", "wb") as file:
+        pickle.dump(out_dict, file)
 
     q.put(None)
     proc.join()
 
 
 if __name__ == '__main__':
-    if not os.path.isfile('data/train.p'):
-        inference()
-    with open('data/train.p', 'rb') as file:
-        samples = pickle.load(file)
+    if not os.path.isfile('data/train_embeddings.p'):
+        update_train_embeddings()
+    with open('data/train_embeddings.p', 'rb') as file:
+        embeddings = pickle.load(file)
 
-    for threshold in np.arange(0.4, 1.2, 0.05):
+    distance = np.empty(shape=(num_train_samples, num_train_samples), dtype=np.float32)
 
-        print('threshold: ' + str(threshold))
+    train_images = get_train_images()
 
-        y_true_list = []
-        y_pred_list = []
+    for i, image_i in tqdm(enumerate(train_images)):
+        for j, image_j in enumerate(train_images):
+            embedding_i = embeddings[image_i]
+            embedding_j = embeddings[image_j]
+            dist = np.square(np.linalg.norm(embedding_i - embedding_j))
+            distance[i, j] = dist
 
-        for sample in tqdm(samples):
-            embedding_a = sample['embedding_a']
-            embedding_p = sample['embedding_p']
-            embedding_n = sample['embedding_n']
-            y_true_list.append(True)
-            y_true_list.append(False)
-
-            dist_1 = np.square(np.linalg.norm(embedding_a - embedding_p))
-            y_pred_list.append(dist_1 <= threshold)
-            dist_2 = np.square(np.linalg.norm(embedding_a - embedding_n))
-            y_pred_list.append(dist_2 <= threshold)
-
-        y = np.array(y_true_list).astype(np.int32)
-        pred = np.array(y_pred_list).astype(np.int32)
-        from sklearn import metrics
-
-        print(y)
-        print(pred)
-
-        fpr, tpr, thresholds = metrics.roc_curve(y, pred)
-        print(metrics.auc(fpr, tpr))
+    with open("data/train_embeddings.p", "wb") as file:
+        pickle.dump(distance.tolist(), file)
