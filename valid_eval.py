@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import best_model, lfw_folder, img_size, channel
+from config import best_model, image_folder, img_size, channel
 from utils import select_triplets
 
 
@@ -46,7 +46,7 @@ class InferenceWorker(Process):
 
                 for j, role in enumerate(['a', 'p', 'n']):
                     image_name = sample[role]
-                    filename = os.path.join(lfw_folder, image_name)
+                    filename = os.path.join(image_folder, image_name)
                     image_bgr = cv.imread(filename)
                     image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
                     image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
@@ -150,30 +150,31 @@ if __name__ == '__main__':
     with open('data/valid.p', 'rb') as file:
         samples = pickle.load(file)
 
-    threshold = 0.6
+    for threshold in np.arrange(0.4, 1.2, 0.05):
 
-    y_true_list = []
-    y_pred_list = []
+        print('threshold: ' + str(threshold))
 
-    for sample in tqdm(samples):
-        embedding_a = sample['embedding_a']
-        embedding_p = sample['embedding_p']
-        embedding_n = sample['embedding_n']
-        y_true_list.append(True)
-        y_true_list.append(False)
+        y_true_list = []
+        y_pred_list = []
 
-        dist_1 = np.square(np.linalg.norm(embedding_a - embedding_p))
-        y_pred = dist_1 <= threshold
-        dist_2 = np.square(np.linalg.norm(embedding_a - embedding_n))
-        y_pred = dist_2 <= threshold
-        y_pred_list.append(y_pred)
+        for sample in tqdm(samples):
+            embedding_a = sample['embedding_a']
+            embedding_p = sample['embedding_p']
+            embedding_n = sample['embedding_n']
+            y_true_list.append(True)
+            y_true_list.append(False)
 
-    y = np.array(y_true_list).astype(np.int32)
-    pred = np.array(y_pred_list).astype(np.int32)
-    from sklearn import metrics
+            dist_1 = np.square(np.linalg.norm(embedding_a - embedding_p))
+            y_pred_list.append(dist_1 <= threshold)
+            dist_2 = np.square(np.linalg.norm(embedding_a - embedding_n))
+            y_pred_list.append(dist_2 <= threshold)
 
-    print(y)
-    print(pred)
+        y = np.array(y_true_list).astype(np.int32)
+        pred = np.array(y_pred_list).astype(np.int32)
+        from sklearn import metrics
 
-    fpr, tpr, thresholds = metrics.roc_curve(y, pred)
-    print(metrics.auc(fpr, tpr))
+        print(y)
+        print(pred)
+
+        fpr, tpr, thresholds = metrics.roc_curve(y, pred)
+        print(metrics.auc(fpr, tpr))
