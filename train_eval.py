@@ -172,3 +172,26 @@ if __name__ == '__main__':
     print(len(train_triplets))
     with open('data/train_triplets.p', 'wb') as file:
         pickle.dump(train_triplets, file)
+
+    with open('data/train_triplets.p', 'rb') as file:
+        train_triplets = pickle.load(file)
+
+    distance_a_p_list = []
+    distance_a_n_list = []
+    for triplet in train_triplets:
+        embedding_a = embeddings[triplet['a']]
+        embedding_p = embeddings[triplet['p']]
+        embedding_n = embeddings[triplet['n']]
+        distance_a_p = np.square(np.linalg.norm(embedding_a - embedding_p))
+        distance_a_p_list.append(distance_a_p)
+        distance_a_n = np.square(np.linalg.norm(embedding_a - embedding_n))
+        distance_a_n_list.append(distance_a_n)
+
+    print('np.mean(distance_a_p_list)' + str(np.mean(distance_a_p_list)))
+    print('np.max(distance_a_p_list)' + str(np.max(distance_a_p_list)))
+    print('np.min(distance_a_p_list)' + str(np.min(distance_a_p_list)))
+    print('np.std(distance_a_p_list)' + str(np.std(distance_a_p_list)))
+    print('np.mean(distance_a_n_list)' + str(np.mean(distance_a_n_list)))
+    print('np.max(distance_a_n_list)' + str(np.max(distance_a_n_list)))
+    print('np.min(distance_a_n_list)' + str(np.min(distance_a_n_list)))
+    print('np.std(distance_a_n_list)' + str(np.std(distance_a_n_list)))
