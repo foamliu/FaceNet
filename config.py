@@ -8,7 +8,7 @@ cache_size = 1000
 num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
-num_train_samples = 200001
+num_train_samples = 199936
 num_valid_samples = 2598
 
 alpha = 0.2
