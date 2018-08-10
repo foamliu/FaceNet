@@ -1,6 +1,6 @@
 img_size = 227
 channel = 3
-batch_size = 128
+batch_size = 64
 epochs = 5
 patience = 10
 embedding_size = 128
