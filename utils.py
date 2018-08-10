@@ -36,7 +36,8 @@ def draw_str(dst, target, s):
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
 
 
-def get_indices():
+# Get statistics for the data
+def get_data_stats():
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
 
@@ -73,7 +74,8 @@ def triplet_loss(y_true, y_pred):
 
 
 def get_valid_triplets():
-    ids, images, image2id, id2images = get_indices()
+    # Random selection of validation set samples
+    ids, images, image2id, id2images = get_data_stats()
     num_samples = num_valid_samples
     images = images[num_train_samples:]
 
@@ -81,19 +83,21 @@ def get_valid_triplets():
 
     for i in tqdm(range(num_samples)):
         # choose a_image
-        a_image = random.choice(images)
-        a_id = image2id[a_image]
-        while len(id2images[a_id]) <= 2:
+        while True:
             a_image = random.choice(images)
             a_id = image2id[a_image]
+            if len(id2images[a_id]) >= 2: break
+
         # choose p_image
-        p_image = random.choice(id2images[a_id])
-        while p_image == a_image:
+        while True:
             p_image = random.choice(id2images[a_id])
+            if p_image != a_image: break
+
         # choose n_image
-        n_image = random.choice(images)
-        while image2id[n_image] == image2id[a_image]:
+        while True:
             n_image = random.choice(images)
+            n_id = image2id[n_image]
+            if n_id != a_id: break
 
         data_set.append({'a': a_image, 'p': p_image, 'n': n_image})
 
@@ -152,7 +156,7 @@ def select_train_triplets():
     with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
-    ids, images, image2id, id2images = get_indices()
+    ids, images, image2id, id2images = get_data_stats()
     train_images = images[:num_train_samples]
     num_batches = num_train_samples // batch_size
     train_triplets = []
@@ -168,7 +172,7 @@ def select_train_triplets():
 
 
 def get_train_images():
-    _, images, _, _ = get_indices()
+    _, images, _, _ = get_data_stats()
     return sorted(images[:num_train_samples])
 
 
