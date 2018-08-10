@@ -6,7 +6,7 @@ import cv2 as cv
 from tqdm import tqdm
 
 from config import identity_annot_filename, image_folder, img_size
-from utils import ensure_folder, get_bbox
+from utils import ensure_folder
 
 
 def extract(folder):
@@ -48,5 +48,4 @@ if __name__ == '__main__':
     if not os.path.isdir(image_folder):
         extract(image_folder)
 
-    bboxes = get_bbox()
     check_image()
