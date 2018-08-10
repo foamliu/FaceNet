@@ -11,7 +11,6 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import image_folder, img_size, channel, num_train_samples
-from triplets import select_train_triplets
 from utils import get_latest_model, get_train_images
 
 
@@ -168,6 +167,7 @@ if __name__ == '__main__':
     with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
+    from triplets import select_train_triplets
     train_triplets = select_train_triplets()
     print(len(train_triplets))
     with open('data/train_triplets.p', 'wb') as file:
