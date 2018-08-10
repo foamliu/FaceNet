@@ -117,7 +117,8 @@ def select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_m
                     distance_mat[a_index, q] <= distance_a_p + alpha and distance_mat[
                         a_index, q] > distance_a_p and image2id[cache[q]] != a_id]
     if len(n_candidates) > 0:
-        return p_image, n_candidates[0]
+        n_q = random.choice(n_candidates)
+        return p_image, cache[n_q]
     else:
         return p_image, None
 
@@ -141,7 +142,8 @@ def select_one_batch(param):
                                             train_images)
         while n_image is None:
             a_image = random.choice(cache)
-            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat, train_images)
+            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat,
+                                                train_images)
         batch_triplets.append({'a': a_image, 'p': p_image, 'n': n_image})
     return batch_triplets
 
