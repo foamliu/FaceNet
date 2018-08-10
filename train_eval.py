@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import image_folder, img_size, channel, num_train_samples
+from config import image_folder, img_size, channel, num_train_samples, SENTINEL
 from utils import get_latest_model, get_train_images
 
 
@@ -117,9 +117,6 @@ def run(gpuids, q):
     return x.start(names)
 
 
-SENTINEL = 1
-
-
 def listener(q):
     pbar = tqdm(total=num_train_samples // 3)
     for item in iter(q.get, None):
@@ -128,7 +125,7 @@ def listener(q):
 
 def create_train_embeddings():
     gpuids = ['0', '1', '2', '3']
-    print(gpuids)
+    print('GPU IDs: ' + str(gpuids))
 
     manager = mp.Manager()
     q = manager.Queue()
