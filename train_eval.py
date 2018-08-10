@@ -126,7 +126,7 @@ def listener(q):
         pbar.update()
 
 
-def update_train_embeddings():
+def create_train_embeddings():
     gpuids = ['0', '1', '2', '3']
     print(gpuids)
 
@@ -151,7 +151,7 @@ def update_train_embeddings():
 train_images = get_train_images()
 
 
-def calc_distance_list(image_i):
+def calculate_distance_list(image_i):
     embedding_i = embeddings[image_i]
     distance_list = np.empty(shape=(num_train_samples,), dtype=np.float32)
     for j, image_j in enumerate(train_images):
@@ -162,8 +162,7 @@ def calc_distance_list(image_i):
 
 
 if __name__ == '__main__':
-    if not os.path.isfile('data/train_embeddings.p'):
-        update_train_embeddings()
+    create_train_embeddings()
     with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
