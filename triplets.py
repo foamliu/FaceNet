@@ -74,7 +74,7 @@ def select_train_triplets():
         else:
             batch_sizes.append(remain)
 
-    pool = Pool(20)
+    pool = Pool(4)
     result = list(tqdm(pool.imap(select_one_batch, batch_sizes), total=num_batches))
     train_triplets = []
     for triplet_list in result:
