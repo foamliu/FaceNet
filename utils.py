@@ -42,7 +42,7 @@ def get_latest_model():
 
 
 # Get statistics for the data
-def get_data_stats():
+def get_data_stats(usage):
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
 
@@ -50,6 +50,11 @@ def get_data_stats():
     images = []
     image2id = {}
     id2images = {}
+
+    if usage == 'train':
+        lines = lines[:num_train_samples]
+    else:
+        lines = lines[num_train_samples:]
 
     for line in lines:
         line = line.strip()
@@ -80,9 +85,8 @@ def triplet_loss(y_true, y_pred):
 
 def get_valid_triplets():
     # Random selection of validation set samples
-    ids, images, image2id, id2images = get_data_stats()
+    ids, images, image2id, id2images = get_data_stats('valid')
     num_samples = num_valid_samples
-    images = images[num_train_samples:]
 
     data_set = []
 
@@ -110,8 +114,8 @@ def get_valid_triplets():
 
 
 def get_train_images():
-    _, images, _, _ = get_data_stats()
-    return sorted(images[:num_train_samples])
+    _, images, _, _ = get_data_stats('train')
+    return sorted(images)
 
 
 def get_lfw_images():
