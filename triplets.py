@@ -1,7 +1,7 @@
 import pickle
 import random
 from multiprocessing import Pool
-
+import math
 import numpy as np
 from tqdm import tqdm
 
@@ -45,7 +45,7 @@ def select_one_triplet(cache, distance_mat):
         return a_image, p_image, n_image
 
 
-def select_one_batch(batch_id):
+def select_one_batch(length):
     cache = sorted(random.sample(train_images, cache_size))
     distance_mat = np.empty(shape=(cache_size, cache_size), dtype=np.float32)
     batch_triplets = []
@@ -56,7 +56,7 @@ def select_one_batch(batch_id):
             dist = np.square(np.linalg.norm(embedding_i - embedding_j))
             distance_mat[i, j] = dist
 
-    for j in range(batch_size):
+    for j in range(length):
         a_image, p_image, n_image = select_one_triplet(cache, distance_mat)
         batch_triplets.append({'a': a_image, 'p': p_image, 'n': n_image})
 
@@ -64,10 +64,19 @@ def select_one_batch(batch_id):
 
 
 def select_train_triplets():
-    num_batches = num_train_samples // batch_size
-    train_triplets = []
+    num_batches = math.ceil(num_train_samples / batch_size)
+    remain = num_train_samples
+    batch_sizes = []
+    for i in range(num_batches):
+        if remain >= batch_size:
+            batch_sizes.append(batch_size)
+            remain -= batch_size
+        else:
+            batch_sizes.append(remain)
+
     pool = Pool(20)
-    result = list(tqdm(pool.imap(select_one_batch, range(num_batches)), total=num_batches))
+    result = list(tqdm(pool.imap(select_one_batch, batch_sizes), total=num_batches))
+    train_triplets = []
     for triplet_list in result:
         train_triplets.extend(triplet_list)
 

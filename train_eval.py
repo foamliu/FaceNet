@@ -43,7 +43,7 @@ class InferenceWorker(Process):
                     sample['p'] = self.in_queue.get(block=False)
                     sample['n'] = self.in_queue.get(block=False)
                 except queue.Empty:
-                    continue
+                    break
 
                 batch_inputs = np.empty((3, 1, img_size, img_size, channel), dtype=np.float32)
 
@@ -162,22 +162,31 @@ def calculate_distance_list(image_i):
 
 
 if __name__ == '__main__':
+    print('create train embeddings')
     create_train_embeddings()
+
+    print('load train embeddings')
     with open('data/train_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
+    print('select train triplets')
     from triplets import select_train_triplets
+
     train_triplets = select_train_triplets()
-    print(len(train_triplets))
+    print('number of train triplets: ' + str(len(train_triplets)))
+
+    print('save train triplets')
     with open('data/train_triplets.p', 'wb') as file:
         pickle.dump(train_triplets, file)
 
+    print('load train triplets')
     with open('data/train_triplets.p', 'rb') as file:
         train_triplets = pickle.load(file)
 
+    print('calculate distances')
     distance_a_p_list = []
     distance_a_n_list = []
-    for triplet in train_triplets:
+    for triplet in tqdm(train_triplets):
         embedding_a = embeddings[triplet['a']]
         embedding_p = embeddings[triplet['p']]
         embedding_n = embeddings[triplet['n']]
