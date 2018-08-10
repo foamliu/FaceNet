@@ -1,5 +1,6 @@
 # encoding=utf-8
 import os
+import pickle
 
 import cv2 as cv
 import numpy as np
@@ -7,16 +8,15 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
 from config import batch_size, img_size, channel, embedding_size, image_folder
-from train_eval import update_train_embeddings
-from utils import select_train_triplets, get_valid_triplets
+from utils import get_valid_triplets
 
 
 class DataGenSequence(Sequence):
     def __init__(self, usage):
         self.usage = usage
         if self.usage == 'train':
-            # update_train_embeddings()
-            self.samples = select_train_triplets()
+            with open('data/train_triplets.p') as file:
+                self.samples = pickle.load(file)
         else:
             self.samples = get_valid_triplets()
 
@@ -45,11 +45,7 @@ class DataGenSequence(Sequence):
         return [batch_inputs[0], batch_inputs[1], batch_inputs[2]], batch_dummy_target
 
     def on_epoch_end(self):
-        if self.usage == 'train':
-            # update_train_embeddings()
-            self.samples = select_train_triplets()
-        else:
-            self.samples = get_valid_triplets()
+        np.random.shuffle(self.samples)
 
 
 def train_gen():
