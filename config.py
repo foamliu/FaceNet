@@ -1,7 +1,7 @@
 img_size = 227
 channel = 3
 batch_size = 64
-epochs = 5
+epochs = 1
 patience = 10
 embedding_size = 128
 cache_size = 1000
