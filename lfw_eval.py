@@ -11,7 +11,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import best_model, lfw_folder, img_size, channel
-from utils import get_lfw_images, get_pairs
+from utils import get_lfw_images, get_lfw_pairs
 
 
 class InferenceWorker(Process):
@@ -154,7 +154,7 @@ if __name__ == "__main__":
     with open('data/preds.p', 'rb') as file:
         embeddings = pickle.load(file)
 
-    pairs = get_pairs()
+    pairs = get_lfw_pairs()
     y_true_list = []
     y_pred_list = []
 

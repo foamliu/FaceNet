@@ -11,7 +11,8 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import image_folder, img_size, channel, num_train_samples
-from utils import get_latest_model, get_train_images, select_train_triplets
+from triplets import select_train_triplets
+from utils import get_latest_model, get_train_images
 
 
 class InferenceWorker(Process):

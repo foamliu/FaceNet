@@ -1,17 +1,14 @@
 import multiprocessing
 import os
-import pickle
 import random
-from multiprocessing import Pool
 
 import cv2 as cv
 import keras.backend as K
-import numpy as np
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples, cache_size, batch_size
+from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples
 
 
 def ensure_folder(folder):
@@ -34,6 +31,14 @@ def draw_str(dst, target, s):
     x, y = target
     cv.putText(dst, s, (x + 1, y + 1), cv.FONT_HERSHEY_PLAIN, 1.0, (0, 0, 0), thickness=2, lineType=cv.LINE_AA)
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
+
+
+def get_latest_model():
+    import glob
+    import os
+    files = glob.glob('models/*.hdf5')
+    files.sort(key=os.path.getmtime)
+    return files[-1]
 
 
 # Get statistics for the data
@@ -104,73 +109,6 @@ def get_valid_triplets():
     return data_set
 
 
-def select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat, train_images):
-    a_id = image2id[a_image]
-    while len(id2images[a_id]) <= 2:
-        a_image = random.choice(cache)
-        a_id = image2id[a_image]
-    a_index = cache.index(a_image)
-    # choose p_image
-    p_image = random.choice(id2images[a_id])
-    while p_image == a_image or p_image not in train_images:
-        p_image = random.choice(id2images[a_id])
-    embedding_a = embeddings[a_image]
-    embedding_p = embeddings[p_image]
-    distance_a_p = np.square(np.linalg.norm(embedding_a - embedding_p))
-    n_candidates = [q for q in range(cache_size) if
-                    distance_mat[a_index, q] <= distance_a_p + alpha and distance_mat[
-                        a_index, q] > distance_a_p and image2id[cache[q]] != a_id]
-    if len(n_candidates) > 0:
-        n_q = random.choice(n_candidates)
-        return p_image, cache[n_q]
-    else:
-        return p_image, None
-
-
-def select_one_batch(param):
-    train_images, image2id, id2images, embeddings = param
-    cache = sorted(random.sample(train_images, cache_size))
-    distance_mat = np.empty(shape=(cache_size, cache_size), dtype=np.float32)
-    batch_triplets = []
-    for i in range(cache_size):
-        for j in range(cache_size):
-            embedding_i = embeddings[cache[i]]
-            embedding_j = embeddings[cache[j]]
-            dist = np.square(np.linalg.norm(embedding_i - embedding_j))
-            distance_mat[i, j] = dist
-
-    for j in range(batch_size):
-        # choose a_image
-        a_image = random.choice(cache)
-        p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat,
-                                            train_images)
-        while n_image is None:
-            a_image = random.choice(cache)
-            p_image, n_image = select_p_n_image(cache, a_image, image2id, id2images, embeddings, distance_mat,
-                                                train_images)
-        batch_triplets.append({'a': a_image, 'p': p_image, 'n': n_image})
-    return batch_triplets
-
-
-def select_train_triplets():
-    with open('data/train_embeddings.p', 'rb') as file:
-        embeddings = pickle.load(file)
-
-    ids, images, image2id, id2images = get_data_stats()
-    train_images = images[:num_train_samples]
-    num_batches = num_train_samples // batch_size
-    train_triplets = []
-    pool = Pool(20)
-    params = []
-    for _ in range(num_batches):
-        params.append((train_images, image2id, id2images, embeddings))
-    result = list(tqdm(pool.imap(select_one_batch, params), total=num_batches))
-    for triplet_list in result:
-        train_triplets.extend(triplet_list)
-
-    return train_triplets
-
-
 def get_train_images():
     _, images, _, _ = get_data_stats()
     return sorted(images[:num_train_samples])
@@ -199,7 +137,7 @@ def get_lfw_images():
     return names
 
 
-def get_pairs():
+def get_lfw_pairs():
     with open('data/pairs.txt', 'r') as file:
         lines = file.readlines()
 
@@ -225,11 +163,3 @@ def get_pairs():
             pairs.append({'image_name_1': image_name_1, 'image_name_2': image_name_2, 'same_person': False})
 
     return pairs
-
-
-def get_latest_model():
-    import glob
-    import os
-    files = glob.glob('models/*.hdf5')
-    files.sort(key=os.path.getmtime)
-    return files[-1]
