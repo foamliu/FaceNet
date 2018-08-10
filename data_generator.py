@@ -15,7 +15,7 @@ class DataGenSequence(Sequence):
     def __init__(self, usage):
         self.usage = usage
         if self.usage == 'train':
-            with open('data/train_triplets.p') as file:
+            with open('data/train_triplets.p', 'rb') as file:
                 self.samples = pickle.load(file)
         else:
             self.samples = get_valid_triplets()
