@@ -10,8 +10,8 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import best_model, lfw_folder, img_size, channel
-from utils import get_lfw_images, get_lfw_pairs
+from config import lfw_folder, img_size, channel
+from utils import get_lfw_images, get_lfw_pairs, get_latest_model
 
 
 class InferenceWorker(Process):
@@ -33,7 +33,7 @@ class InferenceWorker(Process):
 
         # load models
         model = build_model()
-        model.load_weights(best_model)
+        model.load_weights(get_latest_model())
 
         while True:
             try:
@@ -44,7 +44,7 @@ class InferenceWorker(Process):
                     sample['n'] = self.in_queue.get(block=False)
 
                 except queue.Empty:
-                    continue
+                    break
 
                 batch_inputs = np.empty((3, 1, img_size, img_size, channel), dtype=np.float32)
 
@@ -141,7 +141,7 @@ def inference():
     while out_queue.qsize() > 0:
         out_list.append(out_queue.get())
 
-    with open("data/preds.p", "wb") as file:
+    with open("data/lfw_embeddings.p", "wb") as file:
         pickle.dump(out_list, file)
 
     q.put(None)
@@ -149,9 +149,9 @@ def inference():
 
 
 if __name__ == "__main__":
-    if not os.path.isfile('data/preds.p'):
+    if not os.path.isfile('data/lfw_embeddings.p'):
         inference()
-    with open('data/preds.p', 'rb') as file:
+    with open('data/lfw_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
 
     pairs = get_lfw_pairs()
@@ -177,4 +177,4 @@ if __name__ == "__main__":
     print(pred)
 
     fpr, tpr, thresholds = metrics.roc_curve(y, pred)
-    print(metrics.auc(fpr, tpr))
+    print('showing lfw accuracy: ' + str(metrics.auc(fpr, tpr)))

@@ -10,8 +10,8 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import best_model, image_folder, img_size, channel, num_valid_samples
-from utils import select_triplets
+from config import image_folder, img_size, channel, num_valid_samples, SENTINEL
+from utils import get_valid_triplets, get_latest_model
 
 
 class InferenceWorker(Process):
@@ -33,14 +33,14 @@ class InferenceWorker(Process):
 
         # load models
         model = build_model()
-        model.load_weights(best_model)
+        model.load_weights(get_latest_model())
 
         while True:
             try:
                 try:
                     sample = self.in_queue.get(block=False)
                 except queue.Empty:
-                    continue
+                    break
 
                 batch_inputs = np.empty((3, 1, img_size, img_size, channel), dtype=np.float32)
 
@@ -105,16 +105,13 @@ class Scheduler:
 
 def run(gpuids, q):
     # scan all files under img_path
-    samples = select_triplets('valid')
+    samples = get_valid_triplets()
 
     # init scheduler
     x = Scheduler(gpuids, q)
 
     # start processing and wait for complete
     return x.start(samples)
-
-
-SENTINEL = 1
 
 
 def listener(q):
@@ -145,6 +142,7 @@ def inference():
 
 
 if __name__ == '__main__':
+    print('evaluating valid')
     if not os.path.isfile('data/valid.p'):
         inference()
     with open('data/valid.p', 'rb') as file:
