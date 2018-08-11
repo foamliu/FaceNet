@@ -11,7 +11,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import image_folder, img_size, channel, num_valid_samples, SENTINEL
-from utils import get_valid_triplets, get_latest_model
+from utils import get_random_triplets, get_latest_model
 
 
 class InferenceWorker(Process):
@@ -105,7 +105,7 @@ class Scheduler:
 
 def run(gpuids, q):
     # scan all files under img_path
-    samples = get_valid_triplets()
+    samples = get_random_triplets('valid')
 
     # init scheduler
     x = Scheduler(gpuids, q)

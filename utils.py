@@ -86,10 +86,13 @@ def triplet_loss(y_true, y_pred):
     return loss
 
 
-def get_valid_triplets():
+def get_random_triplets(usage):
     # Random selection of validation set samples
-    ids, images, image2id, id2images = get_data_stats('valid')
-    num_samples = num_valid_samples
+    ids, images, image2id, id2images = get_data_stats(usage)
+    if usage == 'train':
+        num_samples = num_train_samples
+    else:
+        num_samples = num_valid_samples
 
     data_set = []
 

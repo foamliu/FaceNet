@@ -8,7 +8,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
 from config import batch_size, img_size, channel, embedding_size, image_folder
-from utils import get_valid_triplets
+from utils import get_random_triplets
 
 
 class DataGenSequence(Sequence):
@@ -16,11 +16,12 @@ class DataGenSequence(Sequence):
         self.usage = usage
         if self.usage == 'train':
             print('loading train samples')
-            with open('data/train_triplets.p', 'rb') as file:
-                self.samples = pickle.load(file)
+            # with open('data/train_triplets.p', 'rb') as file:
+            #     self.samples = pickle.load(file)
+            self.samples = get_random_triplets('train')
         else:
             print('loading valid samples')
-            self.samples = get_valid_triplets()
+            self.samples = get_random_triplets('valid')
 
     def __len__(self):
         return int(np.ceil(len(self.samples) / float(batch_size)))
