@@ -135,11 +135,10 @@ def get_lfw_images():
             count = int(tokens[1])
             for j in range(1, count + 1):
                 name = '{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4))
-                filename = os.path.join('data/lfw_funneled/', name)
+                filename = os.path.join('data/lfw-deepfunneled/', name)
                 if os.path.isfile(filename):
                     names.append(name)
-                else:
-                    print(filename)
+                raise Exception('File Not Found: {}'.format(filename))
 
     return names
 
