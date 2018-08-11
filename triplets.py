@@ -1,7 +1,8 @@
+import math
 import pickle
 import random
 from multiprocessing import Pool
-import math
+
 import numpy as np
 from tqdm import tqdm
 
@@ -34,16 +35,16 @@ def select_one_triplet(cache, distance_mat):
     embedding_p = embeddings[p_image]
     distance_a_p = np.square(np.linalg.norm(embedding_a - embedding_p))
     n_candidates = [cache[n] for n in range(cache_size) if
-                    distance_mat[a_index, n] <= distance_a_p + alpha and distance_mat[
-                        a_index, n] > distance_a_p and image2id[cache[n]] != a_id]
-    if len(n_candidates) > 0:
-        n_image = random.choice(n_candidates)
-        return a_image, p_image, n_image
-    else:
-        # argmin is a_index itself
-        n_index = np.sort(distance_mat[a_index])[1]
-        n_image = cache[n_index]
-        return a_image, p_image, n_image
+                    image2id[cache[n]] != a_id and distance_mat[a_index, n] <= distance_a_p + alpha and distance_mat[
+                        a_index, n] > distance_a_p]
+    if len(n_candidates) == 0:
+        n_candidates = [cache[n] for n in range(cache_size) if
+                        image2id[cache[n]] != a_id and distance_mat[a_index, n] <= distance_a_p + alpha]
+        if len(n_candidates) == 0:
+            n_candidates = [cache[n] for n in range(cache_size) if image2id[cache[n]] != a_id]
+
+    n_image = random.choice(n_candidates)
+    return a_image, p_image, n_image
 
 
 def select_one_batch(length):
