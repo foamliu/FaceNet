@@ -138,7 +138,8 @@ def get_lfw_images():
                 filename = os.path.join('data/lfw-deepfunneled/', name)
                 if os.path.isfile(filename):
                     names.append(name)
-                raise Exception('File Not Found: {}'.format(filename))
+                else:
+                    raise Exception('File Not Found: {}'.format(filename))
 
     return names
 
