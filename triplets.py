@@ -9,7 +9,7 @@ from config import alpha, num_train_samples, cache_size, batch_size
 from utils import get_data_stats
 
 ids, images, image2id, id2images = get_data_stats('train')
-train_images = images[:num_train_samples]
+train_images = images
 with open('data/train_embeddings.p', 'rb') as file:
     embeddings = pickle.load(file)
 
@@ -40,7 +40,8 @@ def select_one_triplet(cache, distance_mat):
         n_image = random.choice(n_candidates)
         return a_image, p_image, n_image
     else:
-        n_index = np.argmin(distance_mat[a_index])
+        # argmin is a_index itself
+        n_index = np.sort(distance_mat[a_index])[1]
         n_image = cache[n_index]
         return a_image, p_image, n_image
 
@@ -48,7 +49,6 @@ def select_one_triplet(cache, distance_mat):
 def select_one_batch(length):
     cache = sorted(random.sample(train_images, cache_size))
     distance_mat = np.empty(shape=(cache_size, cache_size), dtype=np.float32)
-    batch_triplets = []
     for i in range(cache_size):
         for j in range(cache_size):
             embedding_i = embeddings[cache[i]]
@@ -56,6 +56,7 @@ def select_one_batch(length):
             dist = np.square(np.linalg.norm(embedding_i - embedding_j))
             distance_mat[i, j] = dist
 
+    batch_triplets = []
     for j in range(length):
         a_image, p_image, n_image = select_one_triplet(cache, distance_mat)
         batch_triplets.append({'a': a_image, 'p': p_image, 'n': n_image})

@@ -46,7 +46,7 @@ $ python demo.py
 
 P | distance | A | distance | N |
 |---|---|---|---|---|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_p_image.png)|0.4480|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|1.7922|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
+gi|0.4480|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|1.7922|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
 |2.2238|---|2.5129|---|2.2644|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/1_p_image.png)|0.1176|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_a_image.png)|1.0159|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_n_image.png)|
 |2.2250|---|2.2095|---|0.5814|
