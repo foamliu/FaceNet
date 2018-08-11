@@ -153,7 +153,7 @@ if __name__ == "__main__":
         inference()
     with open('data/lfw_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
-    with open('data/threshold.txt', 'w') as file:
+    with open('data/threshold.txt', 'r') as file:
         threshold = float(file.readline().strip())
 
     pairs = get_lfw_pairs()
