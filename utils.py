@@ -8,7 +8,7 @@ import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples
+from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples, lfw_folder
 
 
 def ensure_folder(folder):
@@ -135,7 +135,7 @@ def get_lfw_images():
             count = int(tokens[1])
             for j in range(1, count + 1):
                 name = '{0}/{0}_{1}.jpg'.format(person_name, str(j).zfill(4))
-                filename = os.path.join('data/lfw-deepfunneled/', name)
+                filename = os.path.join(lfw_folder, name)
                 if os.path.isfile(filename):
                     names.append(name)
                 else:

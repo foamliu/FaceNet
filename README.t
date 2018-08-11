@@ -74,7 +74,7 @@ Labeled Faces in the Wild (LFW) database info:
 - 5749 people
 - 1680 people with two or more images
 
-Download the [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-deepfunneled.tgz) and put it under data folder:
+Download the [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz) and put it under data folder:
 
 ```bash
 $ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz

@@ -46,7 +46,7 @@ $ python demo.py
 
 P | distance | A | distance | N |
 |---|---|---|---|---|
-gi|0.4480|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|1.7922|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_p_image.png)|0.4480|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|1.7922|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
 |2.2238|---|2.5129|---|2.2644|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/1_p_image.png)|0.1176|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_a_image.png)|1.0159|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_n_image.png)|
 |2.2250|---|2.2095|---|0.5814|
@@ -74,7 +74,7 @@ Labeled Faces in the Wild (LFW) database info:
 - 5749 people
 - 1680 people with two or more images
 
-Download the [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-deepfunneled.tgz) and put it under data folder:
+Download the [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz) and put it under data folder:
 
 ```bash
 $ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz
@@ -85,4 +85,4 @@ $ wget http://vis-www.cs.umass.edu/lfw/people.txt
 $ python lfw_eval.py
 ```
 
-Accuracy is: 73.35 %.
+Accuracy is: 64.16 %.
