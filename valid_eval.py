@@ -148,12 +148,11 @@ if __name__ == '__main__':
     with open('data/valid_embeddings.p', 'rb') as file:
         samples = pickle.load(file)
 
-
-    accuracies = []
-    thresholds = []
+    accuracy_list = []
+    threshold_list = []
     for threshold in np.arange(0.4, 1.2, 0.05):
         print('threshold: {0:.2f}'.format(threshold))
-        thresholds.append(threshold)
+        threshold_list.append(threshold)
 
         y_true_list = []
         y_pred_list = []
@@ -180,8 +179,8 @@ if __name__ == '__main__':
         fpr, tpr, thresholds = metrics.roc_curve(y, pred)
         accuracy = metrics.auc(fpr, tpr)
         print('accuracy: ' + str(accuracy))
-        accuracies.append(accuracy)
+        accuracy_list.append(accuracy)
 
-    i = int(np.argmax(accuracies))
+    i = int(np.argmax(accuracy_list))
     with open('data/threshold.txt', 'w') as file:
-        file.write('{0:.2f}'.format(thresholds[i]))
+        file.write('{0:.2f}'.format(threshold_list[i]))
