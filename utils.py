@@ -38,7 +38,10 @@ def get_latest_model():
     import os
     files = glob.glob('models/*.hdf5')
     files.sort(key=os.path.getmtime)
-    return files[-1]
+    if len(files) > 0:
+        return files[-1]
+    else:
+        return None
 
 
 # Get statistics for the data
