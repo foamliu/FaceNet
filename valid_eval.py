@@ -120,7 +120,7 @@ def listener(q):
         pbar.update()
 
 
-def inference():
+def create_valid_embeddings():
     gpuids = ['0', '1', '2', '3']
     print(gpuids)
 
@@ -143,8 +143,7 @@ def inference():
 
 if __name__ == '__main__':
     print('evaluating valid')
-    if not os.path.isfile('data/valid_embeddings.p'):
-        inference()
+    create_valid_embeddings()
     with open('data/valid_embeddings.p', 'rb') as file:
         samples = pickle.load(file)
 

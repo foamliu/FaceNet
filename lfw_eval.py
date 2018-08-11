@@ -127,7 +127,7 @@ def listener(q):
         pbar.update()
 
 
-def inference():
+def create_lfw_embeddings():
     gpuids = ['0', '1', '2', '3']
     print(gpuids)
 
@@ -149,8 +149,8 @@ def inference():
 
 
 if __name__ == "__main__":
-    if not os.path.isfile('data/lfw_embeddings.p'):
-        inference()
+    print('evaluating lfw database')
+    create_lfw_embeddings()
     with open('data/lfw_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
     with open('data/threshold.txt', 'r') as file:
