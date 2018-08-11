@@ -134,7 +134,7 @@ def inference():
     while out_queue.qsize() > 0:
         out_list.append(out_queue.get())
 
-    with open("data/valid.p", "wb") as file:
+    with open("data/valid_embeddings.p", "wb") as file:
         pickle.dump(out_list, file)
 
     q.put(None)
@@ -143,14 +143,17 @@ def inference():
 
 if __name__ == '__main__':
     print('evaluating valid')
-    if not os.path.isfile('data/valid.p'):
+    if not os.path.isfile('data/valid_embeddings.p'):
         inference()
-    with open('data/valid.p', 'rb') as file:
+    with open('data/valid_embeddings.p', 'rb') as file:
         samples = pickle.load(file)
 
-    for threshold in np.arange(0.4, 1.2, 0.05):
 
-        print('threshold: ' + str(threshold))
+    accuracies = []
+    thresholds = []
+    for threshold in np.arange(0.4, 1.2, 0.05):
+        print('threshold: {0:.2f}'.format(threshold))
+        thresholds.append(threshold)
 
         y_true_list = []
         y_pred_list = []
@@ -175,4 +178,10 @@ if __name__ == '__main__':
         print(pred)
 
         fpr, tpr, thresholds = metrics.roc_curve(y, pred)
-        print(metrics.auc(fpr, tpr))
+        accuracy = metrics.auc(fpr, tpr)
+        print('accuracy: ' + str(accuracy))
+        accuracies.append(accuracy)
+
+    i = int(np.argmax(accuracies))
+    with open('data/threshold.txt', 'w') as file:
+        file.write('{0:.2f}'.format(thresholds[i]))
