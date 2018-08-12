@@ -6,16 +6,18 @@ from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 from keras.utils import multi_gpu_model
 from keras.models import load_model
 from config import patience, epochs, num_train_samples, num_valid_samples, batch_size
-from data_generator import train_gen, valid_gen
+from data_generator import DataGenSequence
 from model import build_model
-from utils import get_available_gpus, get_available_cpus, ensure_folder, triplet_loss, get_latest_model
+from utils import get_available_gpus, get_available_cpus, ensure_folder, triplet_loss
 
 if __name__ == '__main__':
     # Parse arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-p", "--pretrained", help="path to save pretrained model files")
+    ap.add_argument("-m", "--mode", help="triplet selection mode('semi-hard' or 'none')")
     args = vars(ap.parse_args())
     pretrained_path = args["pretrained"]
+    mode = args["mode"]
     checkpoint_models_path = 'models/'
     ensure_folder('models/')
 
@@ -65,9 +67,9 @@ if __name__ == '__main__':
     callbacks = [tensor_board, model_checkpoint, early_stop, reduce_lr]
 
     # Start Fine-tuning
-    new_model.fit_generator(train_gen(),
+    new_model.fit_generator(DataGenSequence('train', mode),
                             steps_per_epoch=num_train_samples // batch_size,
-                            validation_data=valid_gen(),
+                            validation_data=DataGenSequence('valid', mode),
                             validation_steps=num_valid_samples // batch_size,
                             epochs=epochs,
                             verbose=1,

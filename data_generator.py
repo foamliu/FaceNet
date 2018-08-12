@@ -12,13 +12,15 @@ from utils import get_random_triplets
 
 
 class DataGenSequence(Sequence):
-    def __init__(self, usage):
+    def __init__(self, usage, mode):
         self.usage = usage
         if self.usage == 'train':
             print('loading train samples')
-            # with open('data/train_triplets.p', 'rb') as file:
-            #     self.samples = pickle.load(file)
-            self.samples = get_random_triplets('train')
+            if mode == 'semi-hard':
+                with open('data/train_triplets.p', 'rb') as file:
+                    self.samples = pickle.load(file)
+            else:
+                self.samples = get_random_triplets('train')
         else:
             print('loading valid samples')
             self.samples = get_random_triplets('valid')
@@ -50,10 +52,3 @@ class DataGenSequence(Sequence):
     def on_epoch_end(self):
         np.random.shuffle(self.samples)
 
-
-def train_gen():
-    return DataGenSequence('train')
-
-
-def valid_gen():
-    return DataGenSequence('valid')
