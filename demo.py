@@ -10,14 +10,14 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 
 from config import img_size, channel, embedding_size, image_folder, best_model
 from model import build_model
-from utils import select_triplets
+from utils import get_random_triplets
 
 if __name__ == '__main__':
     model = build_model()
     model.load_weights(best_model)
 
     num_samples = 10
-    samples = select_triplets('valid')
+    samples = get_random_triplets('valid')
     samples = random.sample(samples, num_samples)
 
     a_list = np.empty((10, 128), dtype=np.float32)

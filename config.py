@@ -19,4 +19,4 @@ identity_annot_filename = 'data/identity_CelebA.txt'
 bbox_annot_filename = 'data/list_bbox_celeba.txt'
 lfw_folder = 'data/lfw_funneled'
 
-best_model = 'models/model.13-0.0151.hdf5'
+best_model = 'models/model.13-0.0105.hdf5'
