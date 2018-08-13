@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import lfw_folder, img_size, channel
+from config import lfw_folder, img_size, channel, best_model
 from utils import get_lfw_images, get_lfw_pairs, get_latest_model
 
 
@@ -33,7 +33,8 @@ class InferenceWorker(Process):
 
         # load models
         model = build_model()
-        model.load_weights(get_latest_model())
+        # model.load_weights(get_latest_model())
+        model.load_weights(best_model)
 
         while True:
             try:
