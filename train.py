@@ -4,7 +4,7 @@ import keras
 import tensorflow as tf
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 from keras.utils import multi_gpu_model
-from keras.models import load_model
+
 from config import patience, epochs, num_train_samples, num_valid_samples, batch_size
 from data_generator import DataGenSequence
 from model import build_model
@@ -38,25 +38,24 @@ if __name__ == '__main__':
             fmt = checkpoint_models_path + 'model.%02d-%.4f.hdf5'
             self.model_to_save.save(fmt % (epoch, logs['val_loss']))
 
+
     # pretrained_path = get_latest_model()
 
     # Load our model, added support for Multi-GPUs
     num_gpu = len(get_available_gpus())
     if num_gpu >= 2:
         with tf.device("/cpu:0"):
-            if pretrained_path is None:
-                model = build_model()
-            else:
-                model = load_model(pretrained_path)
+            model = build_model()
+            if pretrained_path is not None:
+                model.load_weights(pretrained_path)
 
         new_model = multi_gpu_model(model, gpus=num_gpu)
         # rewrite the callback: saving through the original model and not the multi-gpu model.
         model_checkpoint = MyCbk(model)
     else:
-        if pretrained_path is None:
-            new_model = build_model()
-        else:
-            new_model = load_model(pretrained_path)
+        new_model = build_model()
+        if pretrained_path is not None:
+            new_model.load_weights(pretrained_path)
 
     adam = keras.optimizers.Adam()
     new_model.compile(optimizer='adam', loss=triplet_loss)
