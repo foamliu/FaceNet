@@ -4,6 +4,7 @@ import random
 
 import cv2 as cv
 import keras.backend as K
+import numpy as np
 import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
@@ -173,3 +174,11 @@ def get_lfw_pairs():
             pairs.append({'image_name_1': image_name_1, 'image_name_2': image_name_2, 'same_person': False})
 
     return pairs
+
+
+def get_smallest_loss():
+    import re
+    pattern = 'model.(?P<epoch>\d+)-(?P<val_loss>[0-9]*\.?[0-9]*).hdf5'
+    p = re.compile(pattern)
+    losses = [float(p.match(f)[1]) for f in os.listdir('models/') if p.match(f)]
+    return np.min(losses)

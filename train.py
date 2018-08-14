@@ -14,10 +14,8 @@ if __name__ == '__main__':
     # Parse arguments
     ap = argparse.ArgumentParser()
     ap.add_argument("-p", "--pretrained", help="path to save pretrained model files")
-    ap.add_argument("-m", "--mode", help="triplet selection mode('semi-hard' or 'none')")
     args = vars(ap.parse_args())
     pretrained_path = args["pretrained"]
-    mode = args["mode"]
     checkpoint_models_path = 'models/'
     ensure_folder('models/')
 
@@ -66,9 +64,9 @@ if __name__ == '__main__':
     callbacks = [tensor_board, model_checkpoint, early_stop, reduce_lr]
 
     # Start Fine-tuning
-    new_model.fit_generator(DataGenSequence('train', mode),
+    new_model.fit_generator(DataGenSequence('train'),
                             steps_per_epoch=num_train_samples // batch_size,
-                            validation_data=DataGenSequence('valid', mode),
+                            validation_data=DataGenSequence('valid'),
                             validation_steps=num_valid_samples // batch_size,
                             epochs=epochs,
                             verbose=1,
