@@ -11,7 +11,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
 from config import image_folder, img_size, channel, num_train_samples, SENTINEL, hard_mode
-from utils import get_latest_model, get_train_images
+from utils import get_best_model, get_train_images
 
 
 class InferenceWorker(Process):
@@ -33,7 +33,7 @@ class InferenceWorker(Process):
 
         # load models
         model = build_model()
-        model.load_weights(get_latest_model())
+        model.load_weights(get_best_model())
 
         while True:
             try:
