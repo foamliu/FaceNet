@@ -180,5 +180,5 @@ def get_smallest_loss():
     import re
     pattern = 'model.(?P<epoch>\d+)-(?P<val_loss>[0-9]*\.?[0-9]*).hdf5'
     p = re.compile(pattern)
-    losses = [float(p.match(f)[1]) for f in os.listdir('models/') if p.match(f)]
+    losses = [float(p.match(f).groups()[1]) for f in os.listdir('models/') if p.match(f)]
     return np.min(losses)
