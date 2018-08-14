@@ -1,7 +1,7 @@
 img_size = 139
 channel = 3
 batch_size = 256
-epochs = 10000
+epochs = 10
 patience = 10
 embedding_size = 128
 num_images = 202599
@@ -12,6 +12,7 @@ num_valid_samples = 2598
 
 alpha = 0.2
 SENTINEL = 1
+threshold = 1.1
 
 image_folder = 'data/img_align_celeba'
 identity_annot_filename = 'data/identity_CelebA.txt'

@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import lfw_folder, img_size, channel
+from config import lfw_folder, img_size, channel, threshold
 from utils import get_lfw_images, get_lfw_pairs, get_best_model
 
 
@@ -153,8 +153,6 @@ if __name__ == "__main__":
     create_lfw_embeddings()
     with open('data/lfw_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
-    with open('data/threshold.txt', 'r') as file:
-        threshold = float(file.readline().strip())
 
     pairs = get_lfw_pairs()
     y_true_list = []
