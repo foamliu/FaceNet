@@ -1,13 +1,13 @@
 # encoding=utf-8
 import os
 import pickle
-
+import json
 import cv2 as cv
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
-from config import batch_size, img_size, channel, embedding_size, image_folder
+from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder
 from utils import get_random_triplets
 
 
@@ -22,9 +22,13 @@ class DataGenSequence(Sequence):
                     self.samples = pickle.load(file)
             else:
                 self.samples = get_random_triplets('train')
+            self.image_folder = image_folder
         else:
             print('loading valid samples')
-            self.samples = get_random_triplets('valid')
+            # self.samples = get_random_triplets('valid')
+            with open('data/lfw_val_triplets.json', 'r') as file:
+                self.samples = json.load(file)
+            self.image_folder = lfw_folder
 
     def __len__(self):
         return int(np.ceil(len(self.samples) / float(batch_size)))
@@ -40,7 +44,7 @@ class DataGenSequence(Sequence):
             sample = self.samples[i + i_batch]
             for j, role in enumerate(['a', 'p', 'n']):
                 image_name = sample[role]
-                filename = os.path.join(image_folder, image_name)
+                filename = os.path.join(self.image_folder, image_name)
                 image_bgr = cv.imread(filename)
                 image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
                 if np.random.random_sample() > 0.5:
