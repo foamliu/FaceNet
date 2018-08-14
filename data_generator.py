@@ -15,9 +15,8 @@ class DataGenSequence(Sequence):
     def __init__(self, usage, mode):
         self.usage = usage
         if self.usage == 'train':
-            print('loading train samples')
+            print('loading train samples, model: {}'.format(mode))
             if mode == 'semi-hard':
-                print(mode)
                 with open('data/train_triplets.p', 'rb') as file:
                     self.samples = pickle.load(file)
             else:
