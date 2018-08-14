@@ -190,5 +190,6 @@ def get_best_model():
     p = re.compile(pattern)
     files = [f for f in os.listdir('models/') if p.match(f)]
     losses = [float(p.match(f).groups()[1]) for f in files]
-    best_index = np.argmin(losses)
-    return files[best_index]
+    best_index = int(np.argmin(losses))
+    filename = os.path.join('models', files[best_index])
+    return filename
