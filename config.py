@@ -12,7 +12,6 @@ num_valid_samples = 2598
 
 alpha = 0.2
 SENTINEL = 1
-threshold = 1.1
 
 image_folder = 'data/img_align_celeba'
 identity_annot_filename = 'data/identity_CelebA.txt'
