@@ -85,4 +85,4 @@ $ wget http://vis-www.cs.umass.edu/lfw/people.txt
 $ python lfw_eval.py
 ```
 
-Accuracy is: 80.57 %.
+Accuracy is: 82.15 %.
