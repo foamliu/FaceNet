@@ -4,7 +4,6 @@ batch_size = 256
 epochs = 10000
 patience = 10
 embedding_size = 128
-cache_size = 1000
 num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
@@ -19,4 +18,9 @@ identity_annot_filename = 'data/identity_CelebA.txt'
 bbox_annot_filename = 'data/list_bbox_celeba.txt'
 lfw_folder = 'data/lfw_funneled'
 
+semi_hard_mode = 'semi-hard'
+hard_mode = 'hard'
+triplet_select_mode = hard_mode
+
 best_model = 'models/model.01-0.0087.hdf5'
+
