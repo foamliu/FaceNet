@@ -11,7 +11,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import image_folder, img_size, channel, num_train_samples, SENTINEL, hard_mode
+from config import image_folder, img_size, channel, num_train_samples, SENTINEL, semi_hard_mode
 from utils import get_best_model, get_train_images
 
 
@@ -170,7 +170,7 @@ if __name__ == '__main__':
     print('selecting train triplets')
     from triplets import select_train_triplets
 
-    train_triplets = select_train_triplets(hard_mode)
+    train_triplets = select_train_triplets(semi_hard_mode)
     print('number of train triplets: ' + str(len(train_triplets)))
 
     print('saving train triplets')
