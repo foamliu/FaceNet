@@ -149,7 +149,7 @@ if __name__ == '__main__':
 
     accuracy_list = []
     threshold_list = []
-    for threshold in np.arange(0.4, 1.2, 0.05):
+    for threshold in np.arange(0.4, 1.2, 0.01):
         print('threshold: {0:.2f}'.format(threshold))
         threshold_list.append(threshold)
 
