@@ -170,7 +170,11 @@ def get_smallest_loss():
     pattern = 'model.(?P<epoch>\d+)-(?P<val_loss>[0-9]*\.?[0-9]*).hdf5'
     p = re.compile(pattern)
     losses = [float(p.match(f).groups()[1]) for f in os.listdir('models/') if p.match(f)]
-    return np.min(losses)
+    if len(losses) == 0:
+        import sys
+        return sys.float_info.max
+    else:
+        return np.min(losses)
 
 
 def get_latest_model():
