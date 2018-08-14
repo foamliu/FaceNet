@@ -1,30 +1,25 @@
 # encoding=utf-8
-import os
-import pickle
 import json
+import os
+
 import cv2 as cv
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
 from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder
-from utils import get_random_triplets
 
 
 class DataGenSequence(Sequence):
-    def __init__(self, usage, mode):
+    def __init__(self, usage):
         self.usage = usage
         if self.usage == 'train':
-            print('loading train samples, model: {}'.format(mode))
-            if mode == 'semi-hard':
-                with open('data/train_triplets.p', 'rb') as file:
-                    self.samples = pickle.load(file)
-            else:
-                self.samples = get_random_triplets('train')
+            print('loading train samples')
+            with open('data/train_triplets.json', 'rb') as file:
+                self.samples = json.load(file)
             self.image_folder = image_folder
         else:
-            print('loading valid samples')
-            # self.samples = get_random_triplets('valid')
+            print('loading valid samples(LFW)')
             with open('data/lfw_val_triplets.json', 'r') as file:
                 self.samples = json.load(file)
             self.image_folder = lfw_folder
@@ -55,4 +50,3 @@ class DataGenSequence(Sequence):
 
     def on_epoch_end(self):
         np.random.shuffle(self.samples)
-
