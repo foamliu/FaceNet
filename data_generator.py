@@ -15,7 +15,7 @@ class DataGenSequence(Sequence):
         self.usage = usage
         if self.usage == 'train':
             print('loading train samples')
-            with open('data/train_triplets.json', 'rb') as file:
+            with open('data/train_triplets.json', 'r') as file:
                 self.samples = json.load(file)
             self.image_folder = image_folder
         else:
