@@ -142,11 +142,12 @@ def create_valid_embeddings():
 
 
 if __name__ == '__main__':
-    print('evaluating valid')
+    print('creating valid embeddings')
     create_valid_embeddings()
     with open('data/valid_embeddings.p', 'rb') as file:
         samples = pickle.load(file)
 
+    print('evaluating valid with various thresholds')
     accuracy_list = []
     threshold_list = []
     for threshold in np.arange(0.4, 1.2, 0.01):

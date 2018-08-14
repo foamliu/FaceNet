@@ -149,7 +149,7 @@ def create_lfw_embeddings():
 
 
 if __name__ == "__main__":
-    print('evaluating lfw database')
+    print('creating lfw embeddings')
     create_lfw_embeddings()
     with open('data/lfw_embeddings.p', 'rb') as file:
         embeddings = pickle.load(file)
@@ -160,6 +160,7 @@ if __name__ == "__main__":
     y_true_list = []
     y_pred_list = []
 
+    print('evaluating lfw database')
     for pair in tqdm(pairs):
         image_name_1 = pair['image_name_1']
         image_name_2 = pair['image_name_2']
