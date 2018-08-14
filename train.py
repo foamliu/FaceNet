@@ -8,15 +8,14 @@ from keras.utils import multi_gpu_model
 from config import patience, epochs, num_train_samples, num_valid_samples, batch_size
 from data_generator import DataGenSequence
 from model import build_model
-from utils import get_available_gpus, get_available_cpus, ensure_folder, triplet_loss, get_smallest_loss
+from utils import get_available_gpus, get_available_cpus, ensure_folder, triplet_loss, get_smallest_loss, get_best_model
 
 if __name__ == '__main__':
     # Parse arguments
     ap = argparse.ArgumentParser()
-    ap.add_argument("-p", "--pretrained", help="path to save pretrained model files")
     args = vars(ap.parse_args())
-    pretrained_path = args["pretrained"]
     checkpoint_models_path = 'models/'
+    pretrained_path = get_best_model()
     ensure_folder('models/')
 
     # Callbacks
@@ -38,8 +37,6 @@ if __name__ == '__main__':
             if float(logs['val_loss']) < smallest_loss:
                 self.model_to_save.save(fmt % (epoch, logs['val_loss']))
 
-
-    # pretrained_path = get_latest_model()
 
     # Load our model, added support for Multi-GPUs
     num_gpu = len(get_available_gpus())

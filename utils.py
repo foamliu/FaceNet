@@ -189,7 +189,9 @@ def get_best_model():
     pattern = 'model.(?P<epoch>\d+)-(?P<val_loss>[0-9]*\.?[0-9]*).hdf5'
     p = re.compile(pattern)
     files = [f for f in os.listdir('models/') if p.match(f)]
-    losses = [float(p.match(f).groups()[1]) for f in files]
-    best_index = int(np.argmin(losses))
-    filename = os.path.join('models', files[best_index])
+    filename = None
+    if len(files) > 0:
+        losses = [float(p.match(f).groups()[1]) for f in files]
+        best_index = int(np.argmin(losses))
+        filename = os.path.join('models', files[best_index])
     return filename
