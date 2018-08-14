@@ -34,17 +34,6 @@ def draw_str(dst, target, s):
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
 
 
-def get_latest_model():
-    import glob
-    import os
-    files = glob.glob('models/*.hdf5')
-    files.sort(key=os.path.getmtime)
-    if len(files) > 0:
-        return files[-1]
-    else:
-        return None
-
-
 # Get statistics for the data
 def get_data_stats(usage):
     with open(identity_annot_filename, 'r') as file:
@@ -182,3 +171,24 @@ def get_smallest_loss():
     p = re.compile(pattern)
     losses = [float(p.match(f).groups()[1]) for f in os.listdir('models/') if p.match(f)]
     return np.min(losses)
+
+
+def get_latest_model():
+    import glob
+    import os
+    files = glob.glob('models/*.hdf5')
+    files.sort(key=os.path.getmtime)
+    if len(files) > 0:
+        return files[-1]
+    else:
+        return None
+
+
+def get_best_model():
+    import re
+    pattern = 'model.(?P<epoch>\d+)-(?P<val_loss>[0-9]*\.?[0-9]*).hdf5'
+    p = re.compile(pattern)
+    files = [f for f in os.listdir('models/') if p.match(f)]
+    losses = [float(p.match(f).groups()[1]) for f in files]
+    best_index = np.argmin(losses)
+    return files[best_index]
