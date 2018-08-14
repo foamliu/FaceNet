@@ -1,3 +1,4 @@
+import json
 import multiprocessing as mp
 import os
 import pickle
@@ -173,12 +174,12 @@ if __name__ == '__main__':
     print('number of train triplets: ' + str(len(train_triplets)))
 
     print('saving train triplets')
-    with open('data/train_triplets.p', 'wb') as file:
-        pickle.dump(train_triplets, file)
+    with open('data/train_triplets.json', 'w') as file:
+        json.dump(train_triplets, file)
 
     print('loading train triplets')
-    with open('data/train_triplets.p', 'rb') as file:
-        train_triplets = pickle.load(file)
+    with open('data/train_triplets.json', 'r') as file:
+        train_triplets = json.load(file)
 
     print('calculate distances')
     distance_a_p_list = []
