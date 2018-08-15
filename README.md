@@ -46,25 +46,25 @@ $ python demo.py
 
 P | distance | A | distance | N |
 |---|---|---|---|---|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|1.2212|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
-|0.7933|---|0.7933|---|0.0000|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_a_image.png)|1.1991|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_n_image.png)|
-|1.0712|---|1.0901|---|0.6765|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_p_image.png)|0.3834|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_a_image.png)|1.0276|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_n_image.png)|
-|0.5112|---|0.7695|---|0.6765|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_a_image.png)|0.9142|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_n_image.png)|
-|1.6567|---|1.4587|---|0.8613|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_p_image.png)|0.5295|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_a_image.png)|1.2233|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_n_image.png)|
-|1.6082|---|1.0769|---|0.8613|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_a_image.png)|0.8680|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_n_image.png)|
-|0.8179|---|0.8179|---|0.0000|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_a_image.png)|0.8852|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_n_image.png)|
-|0.9912|---|0.9912|---|0.0000|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_a_image.png)|0.8872|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_n_image.png)|
-|1.0461|---|1.3231|---|1.0314|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_p_image.png)|0.5246|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_a_image.png)|1.1747|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_n_image.png)|
-|0.6202|---|0.8270|---|1.0314|
-|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_p_image.png)|0.0000|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_a_image.png)|1.0639|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_n_image.png)|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_p_image.png)|0.3579|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|0.9037|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
+|1.2757|---|1.0052|---|1.0740|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_p_image.png)|0.7775|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_a_image.png)|0.7634|![image](https://github.com/foamliu/FaceNet/raw/master/images/1_n_image.png)|
+|1.7359|---|1.3784|---|0.7606|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_p_image.png)|0.3556|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_a_image.png)|1.3154|![image](https://github.com/foamliu/FaceNet/raw/master/images/2_n_image.png)|
+|1.1428|---|0.9498|---|0.7804|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_p_image.png)|0.5836|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_a_image.png)|1.8520|![image](https://github.com/foamliu/FaceNet/raw/master/images/3_n_image.png)|
+|2.0298|---|1.9031|---|1.9189|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_p_image.png)|0.3343|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_a_image.png)|1.7794|![image](https://github.com/foamliu/FaceNet/raw/master/images/4_n_image.png)|
+|1.3242|---|1.5383|---|0.6461|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_p_image.png)|0.2490|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_a_image.png)|1.0756|![image](https://github.com/foamliu/FaceNet/raw/master/images/5_n_image.png)|
+|1.2015|---|1.4692|---|0.8207|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_p_image.png)|0.3323|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_a_image.png)|0.9058|![image](https://github.com/foamliu/FaceNet/raw/master/images/6_n_image.png)|
+|1.1681|---|1.1821|---|0.5887|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_p_image.png)|0.6769|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_a_image.png)|0.8985|![image](https://github.com/foamliu/FaceNet/raw/master/images/7_n_image.png)|
+|1.1974|---|0.7921|---|1.3920|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_p_image.png)|0.3638|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_a_image.png)|1.4623|![image](https://github.com/foamliu/FaceNet/raw/master/images/8_n_image.png)|
+|0.8634|---|0.8968|---|0.5992|
+|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_p_image.png)|0.3681|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_a_image.png)|1.3735|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_n_image.png)|
 
 ### Evaluation
 
