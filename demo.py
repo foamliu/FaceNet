@@ -8,7 +8,7 @@ import keras.backend as K
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 
-from config import img_size, channel, embedding_size, image_folder
+from config import img_size, channel, embedding_size, lfw_folder
 from model import build_model
 from utils import get_random_triplets, get_best_model
 
@@ -17,7 +17,10 @@ if __name__ == '__main__':
     model.load_weights(get_best_model())
 
     num_samples = 10
-    samples = get_random_triplets('valid')
+    print('loading valid samples(LFW)')
+    with open('data/lfw_val_triplets.json', 'r') as file:
+        samples = json.load(file)
+    image_folder = lfw_folder
     samples = random.sample(samples, num_samples)
 
     a_list = np.empty((10, 128), dtype=np.float32)
@@ -46,13 +49,6 @@ if __name__ == '__main__':
         a_list[i] = a
         p_list[i] = p
         n_list[i] = n
-
-    with open('a_list.json', 'w') as file:
-        json.dump(a_list.tolist(), file, indent=4)
-    with open('p_list.json', 'w') as file:
-        json.dump(p_list.tolist(), file, indent=4)
-    with open('n_list.json', 'w') as file:
-        json.dump(n_list.tolist(), file, indent=4)
 
     result = {}
 
