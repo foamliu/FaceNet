@@ -7,10 +7,6 @@ sometimes = lambda aug: iaa.Sometimes(0.5, aug)
 aug_pipe = iaa.Sequential(
     [
         iaa.Fliplr(0.5),  # horizontally flip 50% of all images
-        iaa.CropAndPad(
-            percent=(-0.25, 0.25),
-            pad_mode=["constant"],
-        ),
 
         sometimes(iaa.Affine(
             scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},  # scale images to 80-120% of their size, individually per axis
