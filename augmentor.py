@@ -1,26 +1,22 @@
+import imgaug as ia
 from imgaug import augmenters as iaa
 
 ### augmentors by https://github.com/aleju/imgaug
 sometimes = lambda aug: iaa.Sometimes(0.5, aug)
 
-# Define our sequence of augmentation steps that will be applied to every image
-# All augmenters with per_channel=0.5 will sample one value _per image_
-# in 50% of all cases. In all other cases they will sample new values
-# _per channel_.
 aug_pipe = iaa.Sequential(
     [
-        # apply the following augmenters to most images
-        # iaa.Fliplr(0.5), # horizontally flip 50% of all images
-        # iaa.Flipud(0.2), # vertically flip 20% of all images
-        # sometimes(iaa.Crop(percent=(0, 0.1))), # crop images by 0-10% of their height/width
+        iaa.Fliplr(0.5),  # horizontally flip 50% of all images
+        iaa.Crop(percent=(0, 0.1)),  # random crops
+
         sometimes(iaa.Affine(
-            # scale={"x": (0.8, 1.2), "y": (0.8, 1.2)}, # scale images to 80-120% of their size, individually per axis
-            # translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)}, # translate by -20 to +20 percent (per axis)
-            # rotate=(-5, 5), # rotate by -45 to +45 degrees
-            # shear=(-5, 5), # shear by -16 to +16 degrees
-            # order=[0, 1], # use nearest neighbour or bilinear interpolation (fast)
-            # cval=(0, 255), # if mode is constant, use a cval between 0 and 255
-            # mode=ia.ALL # use any of scikit-image's warping modes (see 2nd image from the top for examples)
+            scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},  # scale images to 80-120% of their size, individually per axis
+            translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)},  # translate by -20 to +20 percent (per axis)
+            rotate=(-5, 5),  # rotate by -45 to +45 degrees
+            shear=(-5, 5),  # shear by -16 to +16 degrees
+            order=[0, 1],  # use nearest neighbour or bilinear interpolation (fast)
+            cval=(0, 255),  # if mode is constant, use a cval between 0 and 255
+            mode=ia.ALL  # use any of scikit-image's warping modes (see 2nd image from the top for examples)
         )),
         # execute 0 to 5 of the following (less important) augmenters per image
         # don't execute all of them, as that would often be way too strong
@@ -28,9 +24,9 @@ aug_pipe = iaa.Sequential(
                    [
                        # sometimes(iaa.Superpixels(p_replace=(0, 1.0), n_segments=(20, 200))), # convert images into their superpixel representation
                        iaa.OneOf([
-                           iaa.GaussianBlur((0, 3.0)),  # blur images with a sigma between 0 and 3.0
-                           iaa.AverageBlur(k=(2, 7)),  # blur image using local means with kernel sizes between 2 and 7
-                           iaa.MedianBlur(k=(3, 11)),
+                           iaa.GaussianBlur((0, 0.5)),  # blur images with a sigma between 0 and 3.0
+                           iaa.AverageBlur(k=(2, 3)),  # blur image using local means with kernel sizes between 2 and 3
+                           iaa.MedianBlur(k=(3, 5)),
                            # blur image using local medians with kernel sizes between 2 and 7
                        ]),
                        iaa.Sharpen(alpha=(0, 1.0), lightness=(0.75, 1.5)),  # sharpen images
@@ -72,7 +68,7 @@ if __name__ == '__main__':
     print('loading train samples')
     with open('data/train_triplets.json', 'r') as file:
         samples = json.load(file)
-    samples = random.sample(samples, 10)
+    samples = random.sample(samples, 30)
 
     for i, sample in enumerate(samples):
         image_name = sample['a']
