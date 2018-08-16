@@ -1,4 +1,3 @@
-import imgaug as ia
 from imgaug import augmenters as iaa
 
 ### augmentors by https://github.com/aleju/imgaug
