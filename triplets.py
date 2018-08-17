@@ -46,8 +46,10 @@ def select_semi_hard(batch, distance_mat, a_image, a_id, p_image):
         n_candidates = [batch[n] for n in range(length) if
                         image2id[batch[n]] != a_id and distance_mat[a_index, n] <= distance_a_p + alpha]
         if len(n_candidates) == 0:
-            # if still not found, any n.
-            n_candidates = [batch[n] for n in range(length) if image2id[batch[n]] != a_id]
+            # if still not found, select hard.
+            # n_candidates = [batch[n] for n in range(length) if image2id[batch[n]] != a_id]
+            n_image = select_hard(batch, distance_mat, a_image, a_id, p_image)
+            n_candidates = [n_image]
 
     n_image = random.choice(n_candidates)
     return n_image
