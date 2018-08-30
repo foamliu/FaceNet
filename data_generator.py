@@ -7,6 +7,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
+from augmentor import aug_pipe
 from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder
 
 
@@ -41,8 +42,9 @@ class DataGenSequence(Sequence):
                 filename = os.path.join(self.image_folder, image_name)
                 image_bgr = cv.imread(filename)
                 image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
-                if np.random.random_sample() > 0.5:
-                    image_bgr = np.fliplr(image_bgr)
+                if self.usage == 'train':
+                    image_bgr = aug_pipe.augment_image(image_bgr)
+
                 image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
                 batch_inputs[j, i_batch] = preprocess_input(image_rgb)
 
