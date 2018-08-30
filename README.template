@@ -25,7 +25,7 @@ CelebFaces Attributes Dataset (CelebA) 是一个大型的人脸数据集，有10
 2.人脸校准：使用dlib的实时姿势估计与OpenCV的仿射变换来尝试使眼睛和下唇在每个图像上出现在相同位置。
 3.卷积网络：使用深度神经网络把人脸图片映射为128维单位超球面上的一个点。
 
-![image](https://github.com/foamliu/FaceNet-v2/raw/master/images/summary.jpg)
+![image](https://github.com/foamliu/FaceNet/raw/master/images/summary.jpg)
 
 ## 如何使用
 ### 数据预处理
