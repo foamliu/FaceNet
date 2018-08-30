@@ -6,7 +6,7 @@ def replace():
     with open('result.json', 'r', encoding="utf-8") as file:
         result = json.load(file)
 
-    with open('README.t', 'r', encoding="utf-8") as file:
+    with open('README.template', 'r', encoding="utf-8") as file:
         text = file.readlines()
 
         text = ''.join(text)

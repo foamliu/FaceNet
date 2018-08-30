@@ -1,44 +1,52 @@
 # FaceNet
 
-This is a Keras implementation of the face recognizer described in the paper [FaceNet: A Unified Embedding for Face Recognition and Clustering](https://arxiv.org/abs/1503.03832).
+这是 FaceNet 的Keras实现 [FaceNet: A Unified Embedding for Face Recognition and Clustering](https://arxiv.org/abs/1503.03832).
 
-## Dependencies
+## 依赖项
 - [NumPy](http://docs.scipy.org/doc/numpy-1.10.1/user/install.html)
 - [Tensorflow](https://www.tensorflow.org/versions/r0.8/get_started/os_setup.html)
 - [Keras](https://keras.io/#installation)
 - [OpenCV](https://opencv-python-tutroals.readthedocs.io/en/latest/)
 
-## Dataset
+## 数据集
 
-CelebFaces Attributes Dataset (CelebA) is a large-scale face dataset with 10,177 identities and 202,599 face images.
+CelebFaces Attributes Dataset (CelebA) 是一个大型的人脸数据集，有10,177个身份和202,599张人脸图像。
 
 ![image](https://github.com/foamliu/FaceNet/raw/master/images/CelebA.png)
 
-Follow the [instruction](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to download Large-scale CelebFaces Attributes (CelebA) Dataset.
+按照 [说明](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) 下载 CelebFaces Attributes (CelebA) 数据集.
 
-## Architecture
+## 模型结构
 ![image](https://github.com/foamliu/FaceNet/raw/master/images/model.png)
 
-## Usage
-### Data Pre-processing
-Extract training images:
+## 工作流程
+处理单个输入图像的工作流程如下：
+1.人脸检测：使用dlib中预先训练的模型检测面部。
+2.人脸校准：使用dlib的实时姿势估计与OpenCV的仿射变换来尝试使眼睛和下唇在每个图像上出现在相同位置。
+3.卷积网络：使用深度神经网络把人脸图片映射为128维单位超球面上的一个点。
+
+![image](https://github.com/foamliu/FaceNet-v2/raw/master/images/summary.jpg)
+
+## 如何使用
+### 数据预处理
+提取训练图像:
 ```bash
 $ python pre-process.py
 ```
 
-### Train
+### 训练
 ```bash
 $ python train.py
 ```
 
-If you want to visualize during training, run in your terminal:
+如果想在可视化训练过程，运行下面命令：
 ```bash
 $ tensorboard --logdir path_to_current_dir/logs
 ```
 
 ### Demo
 
-Download [pre-trained model](https://github.com/foamliu/FaceNet/releases/download/v1.0/model.10-0.0156.hdf5) and put it into models folder.
+下载 [预训练模型](https://github.com/foamliu/FaceNet/releases/download/v1.0/model.10-0.0156.hdf5) 放在 models 目录下。
 
 ```bash
 $ python demo.py
@@ -66,15 +74,15 @@ P | distance | A | distance | N |
 |1.1007|---|0.8181|---|1.1559|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/9_p_image.png)|0.3873|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_a_image.png)|0.9675|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_n_image.png)|
 
-### Evaluation
+### 性能评估
 
-Labeled Faces in the Wild (LFW) database info:
+Labeled Faces in the Wild (LFW) 数据库:
 
-- 13233 images
-- 5749 people
-- 1680 people with two or more images
+- 13233 人脸图片
+- 5749 人物身份
+- 1680 人有两张以上照片
 
-Download the [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz) and put it under data folder:
+下载 [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz) 放在 data 目录下:
 
 ```bash
 $ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz
@@ -85,9 +93,9 @@ $ wget http://vis-www.cs.umass.edu/lfw/people.txt
 $ python lfw_eval.py
 ```
 
-Accuracy is: 89.27 %.
+准确度: 89.27 %.
 
-### Image Augmentation
+### 数据增强
 before | after | before | after | before | after |
 |---|---|---|---|---|---|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_before_0.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_after_0.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_before_1.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_after_1.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_before_2.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_after_2.png)|
