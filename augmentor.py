@@ -7,15 +7,6 @@ aug_pipe = iaa.Sequential(
     [
         iaa.Fliplr(0.5),  # horizontally flip 50% of all images
 
-        sometimes(iaa.Affine(
-            scale={"x": (0.8, 1.2), "y": (0.8, 1.2)},  # scale images to 80-120% of their size, individually per axis
-            translate_percent={"x": (-0.15, 0.15), "y": (-0.15, 0.15)},  # translate by -20 to +20 percent (per axis)
-            rotate=(-25, 25),  # rotate by -45 to +45 degrees
-            shear=(-16, 16),  # shear by -16 to +16 degrees
-            order=[0, 1],  # use nearest neighbour or bilinear interpolation (fast)
-            cval=0,  # if mode is constant, use a cval between 0 and 255
-            mode=["constant"]
-        )),
         # execute 0 to 5 of the following (less important) augmenters per image
         # don't execute all of them, as that would often be way too strong
         iaa.SomeOf((0, 5),
