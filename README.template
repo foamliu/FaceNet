@@ -26,6 +26,7 @@ CelebFaces Attributes Dataset (CelebA) 是一个大型的人脸数据集，有10
 3.卷积网络：使用深度神经网络把人脸图片映射为128维单位超球面上的一个点。
 
 ![image](https://github.com/foamliu/FaceNet/raw/master/images/summary.jpg)
+[图片来源](https://cmusatyalab.github.io/openface/)
 
 ## 如何使用
 ### 数据预处理
