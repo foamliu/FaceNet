@@ -54,7 +54,7 @@ $ tensorboard --logdir path_to_current_dir/logs
 $ python demo.py
 ```
 
-P | distance | A | distance | N |
+正(P) | 欧式距离 | 锚(A) | 欧式距离 | 反(N) |
 |---|---|---|---|---|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/0_p_image.png)|0.1716|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_a_image.png)|1.6495|![image](https://github.com/foamliu/FaceNet/raw/master/images/0_n_image.png)|
 |1.2839|---|1.1502|---|1.1636|
