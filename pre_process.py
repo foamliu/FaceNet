@@ -5,7 +5,7 @@ import zipfile
 import cv2 as cv
 import dlib
 
-from config import identity_annot_filename, image_folder
+from config import img_size, identity_annot_filename, image_folder
 from utils import ensure_folder
 
 predictor_path = 'models/shape_predictor_5_face_landmarks.dat'
@@ -53,12 +53,11 @@ def check_one_image(line):
         for detection in dets:
             faces.append(sp(img, detection))
 
-        window = dlib.image_window()
-
         # It is also possible to get a single chip
-        image = dlib.get_face_chip(img, faces[0], size=139)
-        window.set_image(image)
-        dlib.hit_enter_to_continue()
+        image = dlib.get_face_chip(img, faces[0], size=img_size)
+        image = image[:, :, ::-1]
+        cv.imshow('image', image)
+        cv.waitKey(0)
 
         # try:
         #     resized = cv.resize(original, (img_size, img_size), cv.INTER_CUBIC)
