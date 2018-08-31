@@ -9,11 +9,6 @@ from utils import ensure_folder
 
 predictor_path = 'models/shape_predictor_68_face_landmarks.dat.bz2'
 
-# Load all the models we need: a detector to find the faces, a shape predictor
-# to find face landmarks so we can precisely localize the face
-detector = dlib.get_frontal_face_detector()
-sp = dlib.shape_predictor(predictor_path)
-
 
 def ensure_dlib_model():
     if not os.path.isfile(predictor_path):
@@ -84,10 +79,14 @@ def check_image():
 
 
 if __name__ == '__main__':
-    # parameters
     ensure_folder('data')
     ensure_folder('models')
     ensure_dlib_model()
+
+    # Load all the models we need: a detector to find the faces, a shape predictor
+    # to find face landmarks so we can precisely localize the face
+    detector = dlib.get_frontal_face_detector()
+    sp = dlib.shape_predictor(predictor_path)
 
     if not os.path.isdir(image_folder):
         extract(image_folder)
