@@ -1,11 +1,10 @@
 import os
 import zipfile
-from multiprocessing import Pool
-import bz2
+
 import cv2 as cv
-from tqdm import tqdm
 import dlib
-from config import identity_annot_filename, image_folder, img_size
+
+from config import identity_annot_filename, image_folder
 from utils import ensure_folder
 
 predictor_path = 'models/shape_predictor_68_face_landmarks.dat.bz2'
@@ -16,10 +15,12 @@ detector = dlib.get_frontal_face_detector()
 sp = dlib.shape_predictor(predictor_path)
 
 
-def ensure_dlib_pretrained_model():
+def ensure_dlib_model():
     if not os.path.isfile(predictor_path):
         import urllib.request
-        urllib.request.urlretrieve("http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2", filename="models/shape_predictor_68_face_landmarks.dat.bz2")
+        urllib.request.urlretrieve("http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2",
+                                   filename="models/shape_predictor_68_face_landmarks.dat.bz2")
+
 
 def extract(folder):
     filename = '{}.zip'.format(folder)
@@ -78,15 +79,15 @@ def check_image():
     # pool = Pool(24)
     # for _ in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
     #    pass
-    #pool.close()
-    #pool.join()
-
-
+    # pool.close()
+    # pool.join()
 
 
 if __name__ == '__main__':
     # parameters
     ensure_folder('data')
+    ensure_folder('models')
+    ensure_dlib_model()
 
     if not os.path.isdir(image_folder):
         extract(image_folder)
