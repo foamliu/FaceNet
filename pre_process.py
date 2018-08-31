@@ -8,14 +8,14 @@ import dlib
 from config import identity_annot_filename, image_folder
 from utils import ensure_folder
 
-predictor_path = 'models/shape_predictor_68_face_landmarks.dat'
+predictor_path = 'models/shape_predictor_5_face_landmarks.dat'
 
 
 def ensure_dlib_model():
     if not os.path.isfile(predictor_path):
         import urllib.request
         urllib.request.urlretrieve("http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2",
-                                   filename="models/shape_predictor_68_face_landmarks.dat.bz2")
+                                   filename="models/shape_predictor_5_face_landmarks.dat.bz2")
 
 
 def extract(folder):
