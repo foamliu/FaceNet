@@ -1,9 +1,11 @@
 import bz2
 import os
 import zipfile
+from multiprocessing import Pool
 
 import cv2 as cv
 import dlib
+from tqdm import tqdm
 
 from config import img_size, identity_annot_filename, image_folder
 from utils import ensure_folder
@@ -58,8 +60,8 @@ def check_one_image(line):
         # It is also possible to get a single chip
         image = dlib.get_face_chip(img, faces[0], size=img_size)
         image = image[:, :, ::-1]
-        cv.imshow('image', image)
-        cv.waitKey(0)
+        # cv.imshow('image', image)
+        # cv.waitKey(0)
 
         # try:
         #     resized = cv.resize(original, (img_size, img_size), cv.INTER_CUBIC)
@@ -72,13 +74,13 @@ def check_one_image(line):
 def check_image():
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
-    check_one_image(lines[0])
+    # check_one_image(lines[0])
 
-    # pool = Pool(24)
-    # for _ in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
-    #    pass
-    # pool.close()
-    # pool.join()
+    pool = Pool(24)
+    for _ in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
+        pass
+    pool.close()
+    pool.join()
 
 
 if __name__ == '__main__':
