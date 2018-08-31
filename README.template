@@ -31,7 +31,7 @@ CelebFaces Attributes Dataset (CelebA) 是一个大型的人脸数据集，有10
 
 ## 预训练模型
 
-下载这些预训练模型，放在 models 目录下。
+下载预训练模型，放在 models 目录下：
 
 1. Dlib 人脸校准模型 [shape_predictor_5_face_landmarks.dat.bz2](http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2)
 2. FaceNet 人脸识别模型 [model.10-0.0156.hdf5](https://github.com/foamliu/FaceNet/releases/download/v1.0/model.10-0.0156.hdf5)
