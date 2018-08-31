@@ -9,7 +9,7 @@ import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, num_train_samples, num_valid_samples, lfw_folder
+from config import alpha, identity_annot_filename, num_train_samples, lfw_folder
 
 
 def ensure_folder(folder):
@@ -36,9 +36,9 @@ def draw_str(dst, target, s):
 
 def get_excludes():
     with open('data/exclude.txt') as file:
-        data = file.readlines()
-
-    return data
+        lines = file.readlines()
+    lines = [line.strip() for line in lines]
+    return lines
 
 
 # Get statistics for train data
@@ -80,13 +80,9 @@ def triplet_loss(y_true, y_pred):
     return loss
 
 
-def get_random_triplets(usage):
+def get_random_triplets():
     # Random selection of validation set samples
-    ids, images, image2id, id2images = get_data_stats(usage)
-    if usage == 'train':
-        num_samples = num_train_samples
-    else:
-        num_samples = num_valid_samples
+    ids, images, image2id, id2images = get_data_stats()
 
     data_set = []
 
