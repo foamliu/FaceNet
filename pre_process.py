@@ -1,3 +1,4 @@
+import bz2
 import os
 import zipfile
 
@@ -7,7 +8,7 @@ import dlib
 from config import identity_annot_filename, image_folder
 from utils import ensure_folder
 
-predictor_path = 'models/shape_predictor_68_face_landmarks.dat.bz2'
+predictor_path = 'models/shape_predictor_68_face_landmarks.dat'
 
 
 def ensure_dlib_model():
@@ -22,6 +23,14 @@ def extract(folder):
     print('Extracting {}...'.format(filename))
     with zipfile.ZipFile(filename, 'r') as zip_ref:
         zip_ref.extractall('data')
+
+
+def extract_bz2(new):
+    old = '{}.bz2'.format(new)
+    print('Extracting {}...'.format(old))
+    with open(new, 'wb') as new_file, bz2.BZ2File(old, 'rb') as file:
+        for data in iter(lambda: file.read(100 * 1024), b''):
+            new_file.write(data)
 
 
 def check_one_image(line):
@@ -82,6 +91,7 @@ if __name__ == '__main__':
     ensure_folder('data')
     ensure_folder('models')
     ensure_dlib_model()
+    extract_bz2(predictor_path)
 
     # Load all the models we need: a detector to find the faces, a shape predictor
     # to find face landmarks so we can precisely localize the face
