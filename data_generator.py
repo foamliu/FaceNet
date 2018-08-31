@@ -6,9 +6,9 @@ import cv2 as cv
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
-
+import dlib
 from augmentor import aug_pipe
-from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder
+from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder, predictor_path
 
 
 class DataGenSequence(Sequence):
@@ -25,6 +25,9 @@ class DataGenSequence(Sequence):
                 self.samples = json.load(file)
             self.image_folder = lfw_folder
 
+        self.detector = dlib.get_frontal_face_detector()
+        self.sp = dlib.shape_predictor(predictor_path)
+
     def __len__(self):
         return int(np.ceil(len(self.samples) / float(batch_size)))
 
@@ -40,13 +43,23 @@ class DataGenSequence(Sequence):
             for j, role in enumerate(['a', 'p', 'n']):
                 image_name = sample[role]
                 filename = os.path.join(self.image_folder, image_name)
-                image_bgr = cv.imread(filename)
-                image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
-                if self.usage == 'train':
-                    image_bgr = aug_pipe.augment_image(image_bgr)
+                image = cv.imread(filename)     # BGR
+                image = image[:, :, ::-1]       # RGB
+                dets = self.detector(image, 1)
 
-                image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
-                batch_inputs[j, i_batch] = preprocess_input(image_rgb)
+                num_faces = len(dets)
+                if num_faces > 0:
+                    # Find the 5 face landmarks we need to do the alignment.
+                    faces = dlib.full_object_detections()
+                    for detection in dets:
+                        faces.append(self.sp(image, detection))
+
+                    image = dlib.get_face_chip(image, faces[0], size=img_size)
+
+                if self.usage == 'train':
+                    image = aug_pipe.augment_image(image)
+
+                batch_inputs[j, i_batch] = preprocess_input(image)
 
         return [batch_inputs[0], batch_inputs[1], batch_inputs[2]], batch_dummy_target
 
