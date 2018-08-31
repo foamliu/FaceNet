@@ -16,6 +16,11 @@ detector = dlib.get_frontal_face_detector()
 sp = dlib.shape_predictor(predictor_path)
 
 
+def ensure_dlib_pretrained_model():
+    if not os.path.isfile(predictor_path):
+        import urllib.request
+        urllib.request.urlretrieve("http://dlib.net/files/shape_predictor_5_face_landmarks.dat.bz2", filename="models/shape_predictor_68_face_landmarks.dat.bz2")
+
 def extract(folder):
     filename = '{}.zip'.format(folder)
     print('Extracting {}...'.format(filename))
