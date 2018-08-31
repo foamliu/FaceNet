@@ -34,8 +34,15 @@ def draw_str(dst, target, s):
     cv.putText(dst, s, (x, y), cv.FONT_HERSHEY_PLAIN, 1.0, (255, 255, 255), lineType=cv.LINE_AA)
 
 
-# Get statistics for the data
-def get_data_stats(usage):
+def get_excludes():
+    with open('data/exclude.txt') as file:
+        data = file.readlines()
+
+    return data
+
+
+# Get statistics for train data
+def get_data_stats():
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
 
@@ -43,25 +50,22 @@ def get_data_stats(usage):
     images = []
     image2id = {}
     id2images = {}
-
-    if usage == 'train':
-        lines = lines[:num_train_samples]
-    else:
-        lines = lines[num_train_samples:]
+    excludes = get_excludes()
 
     for line in lines:
         line = line.strip()
         if len(line) > 0:
             tokens = line.split(' ')
             image_name = tokens[0].strip()
-            id = tokens[1].strip()
-            ids.add(id)
-            images.append(image_name)
-            image2id[image_name] = id
-            if id in id2images.keys():
-                id2images[id].append(image_name)
-            else:
-                id2images[id] = [image_name]
+            if image_name not in excludes:
+                id = tokens[1].strip()
+                ids.add(id)
+                images.append(image_name)
+                image2id[image_name] = id
+                if id in id2images.keys():
+                    id2images[id].append(image_name)
+                else:
+                    id2images[id] = [image_name]
 
     return list(ids), images, image2id, id2images
 
@@ -110,7 +114,7 @@ def get_random_triplets(usage):
 
 
 def get_train_images():
-    _, images, _, _ = get_data_stats('train')
+    _, images, _, _ = get_data_stats()
     return sorted(images)
 
 

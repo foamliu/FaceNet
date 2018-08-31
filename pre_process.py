@@ -61,14 +61,6 @@ def check_one_image(line):
         image = image[:, :, ::-1]
 
 
-        # try:
-        #     resized = cv.resize(original, (img_size, img_size), cv.INTER_CUBIC)
-        # except cv.error as err:
-        #     print(filename)
-        #     print('image_name={} original.shape={}'.format(image_name, original.shape))
-        #     print('image_name={} resized.shape={}'.format(image_name, resized.shape))
-
-
 def check_image():
     with open(identity_annot_filename, 'r') as file:
         lines = file.readlines()
@@ -83,7 +75,7 @@ def check_image():
 
     results = [r for r in results if r is not None]
     print(len(results))
-    with open('results.txt', 'w') as file:
+    with open('data/exclude.txt', 'w') as file:
         file.write('\n'.join(results))
 
 

@@ -10,7 +10,7 @@ from tqdm import tqdm
 from config import alpha, num_train_samples, batch_size, semi_hard_mode, hard_mode
 from utils import get_data_stats
 
-ids, images, image2id, id2images = get_data_stats('train')
+ids, images, image2id, id2images = get_data_stats()
 train_images = images
 with open('data/train_embeddings.p', 'rb') as file:
     embeddings = pickle.load(file)
