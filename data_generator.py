@@ -80,6 +80,6 @@ if __name__ == '__main__':
     p = x[1]
     n = x[2]
     for i in range(10):
-        cv.imwrite('images/sample_a_{}'.format(i), a[i][:, :, ::-1])
-        cv.imwrite('images/sample_p_{}'.format(i), p[i][:, :, ::-1])
-        cv.imwrite('images/sample_n_{}'.format(i), n[i][:, :, ::-1])
+        cv.imwrite('images/sample_a_{}.jpg'.format(i), a[i][:, :, ::-1])
+        cv.imwrite('images/sample_p_{}.jpg'.format(i), p[i][:, :, ::-1])
+        cv.imwrite('images/sample_n_{}.jpg'.format(i), n[i][:, :, ::-1])
