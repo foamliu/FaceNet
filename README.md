@@ -29,6 +29,30 @@ CelebFaces Attributes Dataset (CelebA) 是一个大型的人脸数据集，有10
 ![image](https://github.com/foamliu/FaceNet/raw/master/images/summary.jpg)
 [图片来源](https://cmusatyalab.github.io/openface/)
 
+## 性能评估
+
+使用 Labeled Faces in the Wild (LFW) 数据集做性能评估:
+
+- 13233 人脸图片
+- 5749 人物身份
+- 1680 人有两张以上照片
+
+### 准备数据
+下载 [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz) 放在 data 目录下:
+
+```bash
+$ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz
+$ tar -xvf lfw-funneled.tgz
+$ wget http://vis-www.cs.umass.edu/lfw/pairs.txt
+$ wget http://vis-www.cs.umass.edu/lfw/people.txt
+
+### 执行评估脚本
+$ python lfw_eval.py
+```
+
+### 测得结果
+准确度: **89.27 %**.
+
 ## 如何使用
 ### 数据预处理
 提取训练图像:
@@ -80,26 +104,6 @@ $ python demo.py
 |1.1007|---|0.8181|---|1.1559|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/9_p_image.png)|0.3873|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_a_image.png)|0.9675|![image](https://github.com/foamliu/FaceNet/raw/master/images/9_n_image.png)|
 
-### 性能评估
-
-Labeled Faces in the Wild (LFW) 数据库:
-
-- 13233 人脸图片
-- 5749 人物身份
-- 1680 人有两张以上照片
-
-下载 [LFW database](http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz) 放在 data 目录下:
-
-```bash
-$ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz
-$ tar -xvf lfw-funneled.tgz
-$ wget http://vis-www.cs.umass.edu/lfw/pairs.txt
-$ wget http://vis-www.cs.umass.edu/lfw/people.txt
-
-$ python lfw_eval.py
-```
-
-准确度: 89.27 %.
 
 ### 数据增强
 before | after | before | after | before | after |
