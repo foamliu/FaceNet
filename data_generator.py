@@ -8,6 +8,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
+from augmentor import aug_pipe
 from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder, predictor_path
 from utils import get_random_triplets
 
@@ -60,8 +61,8 @@ class DataGenSequence(Sequence):
 
                     image = dlib.get_face_chip(image, faces[0], size=img_size)
 
-                # if self.usage == 'train':
-                #     image = aug_pipe.augment_image(image)
+                if self.usage == 'train':
+                    image = aug_pipe.augment_image(image)
 
                 batch_inputs[j, i_batch] = preprocess_input(image)
 
