@@ -38,7 +38,9 @@ def check_one_image(line):
     if len(line) > 0:
         tokens = line.split(' ')
         image_name = tokens[0].strip()
+        print(image_name)
         filename = os.path.join(image_folder, image_name)
+        print(filename)
         img = cv.imread(filename)
         img = img[:, :, ::-1]
         dets = detector(img, 1)
