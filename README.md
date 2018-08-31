@@ -52,8 +52,10 @@ $ wget http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz
 $ tar -xvf lfw-funneled.tgz
 $ wget http://vis-www.cs.umass.edu/lfw/pairs.txt
 $ wget http://vis-www.cs.umass.edu/lfw/people.txt
+```
 
-### 执行评估脚本
+### 评估脚本
+```bash
 $ python lfw_eval.py
 ```
 
