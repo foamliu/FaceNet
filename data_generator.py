@@ -61,8 +61,8 @@ class DataGenSequence(Sequence):
 
                     image = dlib.get_face_chip(image, faces[0], size=img_size)
 
-                if self.usage == 'train':
-                    image = aug_pipe.augment_image(image)
+                # if self.usage == 'train':
+                #     image = aug_pipe.augment_image(image)
 
                 batch_inputs[j, i_batch] = preprocess_input(image)
 
