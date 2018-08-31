@@ -58,8 +58,9 @@ class DataGenSequence(Sequence):
                     faces = dlib.full_object_detections()
                     for detection in dets:
                         faces.append(self.sp(image, detection))
-
                     image = dlib.get_face_chip(image, faces[0], size=img_size)
+                else:
+                    image = cv.resize(image, (img_size, img_size), cv.INTER_CUBIC)
 
                 if self.usage == 'train':
                     image = aug_pipe.augment_image(image)
