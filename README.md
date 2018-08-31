@@ -75,7 +75,7 @@ $ python pre-process.py
 $ python train.py
 ```
 
-如果想在可视化训练过程，运行下面命令：
+要想可视化训练过程，执行下面命令：
 ```bash
 $ tensorboard --logdir path_to_current_dir/logs
 ```
@@ -112,7 +112,7 @@ $ python demo.py
 ## 附录
 
 ### 样本数据
-执行下面命令生成10条样本数据：
+执行下面命令查看样本数据：
 ```bash
 $ python data_generator.py
 ```
@@ -131,6 +131,10 @@ $ python data_generator.py
 
 
 ### 数据增强
+执行下面命令查看数据增强效果：
+```bash
+$ python data_generator.py
+```
 之前 | 之后 | 之前 | 之后 | 之前 | 之后 |
 |---|---|---|---|---|---|
 |![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_before_0.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_after_0.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_before_1.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_after_1.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_before_2.png)|![image](https://github.com/foamliu/FaceNet/raw/master/images/imgaug_after_2.png)|
