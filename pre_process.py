@@ -55,16 +55,8 @@ def check_one_image(line):
 
         window = dlib.image_window()
 
-        # Get the aligned face images
-        # Optionally:
-        # images = dlib.get_face_chips(img, faces, size=160, padding=0.25)
-        images = dlib.get_face_chips(img, faces, size=320)
-        for image in images:
-            window.set_image(image)
-            dlib.hit_enter_to_continue()
-
         # It is also possible to get a single chip
-        image = dlib.get_face_chip(img, faces[0])
+        image = dlib.get_face_chip(img, faces[0], size=139)
         window.set_image(image)
         dlib.hit_enter_to_continue()
 
