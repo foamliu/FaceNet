@@ -54,8 +54,9 @@ if __name__ == '__main__':
         if pretrained_path is not None:
             new_model.load_weights(pretrained_path)
 
-    sgd = keras.optimizers.SGD(lr=5e-6, momentum=0.9, nesterov=True, decay=1e-6)
-    new_model.compile(optimizer=sgd, loss=triplet_loss)
+    #sgd = keras.optimizers.SGD(lr=5e-6, momentum=0.9, nesterov=True, decay=1e-6)
+    adam = keras.optimizers.Adam(lr=0.05)
+    new_model.compile(optimizer=adam, loss=triplet_loss)
 
     print(new_model.summary())
 
