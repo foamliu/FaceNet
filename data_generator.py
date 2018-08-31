@@ -76,9 +76,9 @@ if __name__ == '__main__':
     data_gen = DataGenSequence('train')
     item = data_gen.__getitem__(0)
     x, y = item
-    a = item[0]
-    p = item[1]
-    n = item[2]
+    a = x[0]
+    p = x[1]
+    n = x[2]
     for i in range(10):
         cv.imwrite('images/sample_a_{}'.format(i), a[i][:, :, ::-1])
         cv.imwrite('images/sample_p_{}'.format(i), p[i][:, :, ::-1])
