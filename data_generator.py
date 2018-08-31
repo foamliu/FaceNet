@@ -8,7 +8,6 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
 
-from augmentor import aug_pipe
 from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder, predictor_path
 from utils import get_random_triplets
 
@@ -72,13 +71,17 @@ class DataGenSequence(Sequence):
         np.random.shuffle(self.samples)
 
 
+def revert_pre_process(x):
+    return ((x + 1) * 127.5).astype(np.uint8)
+
+
 if __name__ == '__main__':
     data_gen = DataGenSequence('train')
     item = data_gen.__getitem__(0)
     x, y = item
-    a = x[0]
-    p = x[1]
-    n = x[2]
+    a = revert_pre_process(x[0])
+    p = revert_pre_process(x[1])
+    n = revert_pre_process(x[2])
     for i in range(10):
         cv.imwrite('images/sample_a_{}.jpg'.format(i), a[i][:, :, ::-1])
         cv.imwrite('images/sample_p_{}.jpg'.format(i), p[i][:, :, ::-1])
