@@ -7,8 +7,7 @@ embedding_size = 128
 num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
-num_train_samples = 202598
-
+num_train_samples = 196999  # 202,599 - 5,600 = 196999, 5,600 were excluded as they cannot be aligned by dlib
 
 alpha = 0.2
 SENTINEL = 1
@@ -24,4 +23,3 @@ hard_mode = 'hard'
 triplet_select_mode = hard_mode
 
 best_model = 'models/model.01-0.0087.hdf5'
-

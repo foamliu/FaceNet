@@ -86,7 +86,7 @@ def get_random_triplets():
 
     data_set = []
 
-    for i in tqdm(range(num_samples)):
+    for i in tqdm(range(num_train_samples)):
         # choose a_image
         while True:
             a_image = random.choice(images)
