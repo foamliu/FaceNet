@@ -3,12 +3,14 @@ import json
 import os
 
 import cv2 as cv
+import dlib
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from keras.utils import Sequence
-import dlib
+
 from augmentor import aug_pipe
 from config import batch_size, img_size, channel, embedding_size, image_folder, lfw_folder, predictor_path
+from utils import get_random_triplets
 
 
 class DataGenSequence(Sequence):
@@ -16,14 +18,17 @@ class DataGenSequence(Sequence):
         self.usage = usage
         if self.usage == 'train':
             print('loading train samples')
-            with open('data/train_triplets.json', 'r') as file:
-                self.samples = json.load(file)
             self.image_folder = image_folder
+            if os.path.isfile('data/train_triplets.json'):
+                with open('data/train_triplets.json', 'r') as file:
+                    self.samples = json.load(file)
+            else:
+                self.samples = get_random_triplets()
         else:
             print('loading valid samples(LFW)')
+            self.image_folder = lfw_folder
             with open('data/lfw_val_triplets.json', 'r') as file:
                 self.samples = json.load(file)
-            self.image_folder = lfw_folder
 
         self.detector = dlib.get_frontal_face_detector()
         self.sp = dlib.shape_predictor(predictor_path)
@@ -43,8 +48,8 @@ class DataGenSequence(Sequence):
             for j, role in enumerate(['a', 'p', 'n']):
                 image_name = sample[role]
                 filename = os.path.join(self.image_folder, image_name)
-                image = cv.imread(filename)     # BGR
-                image = image[:, :, ::-1]       # RGB
+                image = cv.imread(filename)  # BGR
+                image = image[:, :, ::-1]  # RGB
                 dets = self.detector(image, 1)
 
                 num_faces = len(dets)
