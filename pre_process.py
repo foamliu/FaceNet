@@ -40,6 +40,7 @@ def check_one_image(line):
         image_name = tokens[0].strip()
         filename = os.path.join(image_folder, image_name)
         img = cv.imread(filename)
+        img = img[:, :, ::-1]
         dets = detector(img, 1)
 
         num_faces = len(dets)
