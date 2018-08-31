@@ -82,6 +82,8 @@ def check_image():
     pool.join()
 
     print(len(results))
+    with open('results.txt', 'w') as file:
+        file.write('\n'.join(results))
 
 
 if __name__ == '__main__':
