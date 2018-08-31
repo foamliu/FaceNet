@@ -8,6 +8,7 @@ num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
 num_train_samples = 196999  # 202,599 - 5,600 = 196999, 5,600 were excluded as they cannot be aligned by dlib
+num_valid_samples = 2185
 predictor_path = 'models/shape_predictor_5_face_landmarks.dat'
 alpha = 0.2
 SENTINEL = 1
