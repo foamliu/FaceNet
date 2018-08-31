@@ -81,6 +81,7 @@ def check_image():
     pool.close()
     pool.join()
 
+    results = [r for r in results if r is not None]
     print(len(results))
     with open('results.txt', 'w') as file:
         file.write('\n'.join(results))
