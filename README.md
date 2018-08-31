@@ -68,6 +68,7 @@ $ python lfw_eval.py
 ```bash
 $ python pre-process.py
 ```
+总共 202,599张人脸图像中，5600张无法被 dlib 标定。因此 202599 - 5600 = 196999 张被用于训练。
 
 ### 训练
 ```bash
