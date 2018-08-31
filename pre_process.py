@@ -40,17 +40,16 @@ def check_one_image(line):
     if len(line) > 0:
         tokens = line.split(' ')
         image_name = tokens[0].strip()
-        print(image_name)
+        # print(image_name)
         filename = os.path.join(image_folder, image_name)
-        print(filename)
+        # print(filename)
         img = cv.imread(filename)
         img = img[:, :, ::-1]
         dets = detector(img, 1)
 
         num_faces = len(dets)
         if num_faces == 0:
-            print("Sorry, there were no faces found in '{}'".format(filename))
-            exit()
+            return image_name
 
         # Find the 5 face landmarks we need to do the alignment.
         faces = dlib.full_object_detections()
@@ -60,8 +59,7 @@ def check_one_image(line):
         # It is also possible to get a single chip
         image = dlib.get_face_chip(img, faces[0], size=img_size)
         image = image[:, :, ::-1]
-        # cv.imshow('image', image)
-        # cv.waitKey(0)
+
 
         # try:
         #     resized = cv.resize(original, (img_size, img_size), cv.INTER_CUBIC)
@@ -77,10 +75,13 @@ def check_image():
     # check_one_image(lines[0])
 
     pool = Pool(24)
-    for _ in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
-        pass
+    results = []
+    for item in tqdm(pool.imap_unordered(check_one_image, lines), total=len(lines)):
+        results.append(item)
     pool.close()
     pool.join()
+
+    print(len(results))
 
 
 if __name__ == '__main__':
