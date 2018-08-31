@@ -79,7 +79,7 @@ if __name__ == '__main__':
     with open('result.json', 'w') as file:
         json.dump(result, file, indent=4)
 
-    from replace_macro import replace
+    from template import replace
 
     replace()
 
