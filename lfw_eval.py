@@ -6,11 +6,12 @@ from multiprocessing import Process
 from multiprocessing import Process
 
 import cv2 as cv
+import dlib
 import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import lfw_folder, img_size, channel, threshold
+from config import lfw_folder, img_size, channel, threshold, predictor_path
 from utils import get_lfw_images, get_lfw_pairs, get_best_model
 
 
@@ -28,6 +29,9 @@ class InferenceWorker(Process):
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = str(self.gpuid)
         print("InferenceWorker init, GPU ID: {}".format(self.gpuid))
+
+        detector = dlib.get_frontal_face_detector()
+        sp = dlib.shape_predictor(predictor_path)
 
         from model import build_model
 
@@ -51,10 +55,21 @@ class InferenceWorker(Process):
                 for j, role in enumerate(['a', 'p', 'n']):
                     image_name = sample[role]
                     filename = os.path.join(lfw_folder, image_name)
-                    image_bgr = cv.imread(filename)
-                    image_bgr = cv.resize(image_bgr, (img_size, img_size), cv.INTER_CUBIC)
-                    image_rgb = cv.cvtColor(image_bgr, cv.COLOR_BGR2RGB)
-                    batch_inputs[j, 0] = preprocess_input(image_rgb)
+                    image = cv.imread(filename)
+                    image = image[:, :, ::-1]  # RGB
+                    dets = detector(image, 1)
+
+                    num_faces = len(dets)
+                    if num_faces > 0:
+                        # Find the 5 face landmarks we need to do the alignment.
+                        faces = dlib.full_object_detections()
+                        for detection in dets:
+                            faces.append(self.sp(image, detection))
+                        image = dlib.get_face_chip(image, faces[0], size=img_size)
+                    else:
+                        image = cv.resize(image, (img_size, img_size), cv.INTER_CUBIC)
+
+                    batch_inputs[j, 0] = preprocess_input(image)
 
                 y_pred = model.predict([batch_inputs[0], batch_inputs[1], batch_inputs[2]])
                 a = y_pred[0, 0:128]
