@@ -23,15 +23,14 @@ class InferenceWorker(Process):
         self.in_queue = in_queue
         self.out_queue = out_queue
         self.signal_queue = signal_queue
+        self.detector = dlib.get_frontal_face_detector()
+        self.sp = dlib.shape_predictor(predictor_path)
 
     def run(self):
         # set enviornment
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = str(self.gpuid)
         print("InferenceWorker init, GPU ID: {}".format(self.gpuid))
-
-        detector = dlib.get_frontal_face_detector()
-        sp = dlib.shape_predictor(predictor_path)
 
         from model import build_model
 
@@ -57,7 +56,7 @@ class InferenceWorker(Process):
                     filename = os.path.join(lfw_folder, image_name)
                     image = cv.imread(filename)
                     image = image[:, :, ::-1]  # RGB
-                    dets = detector(image, 1)
+                    dets = self.detector(image, 1)
 
                     num_faces = len(dets)
                     if num_faces > 0:
