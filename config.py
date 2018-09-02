@@ -7,7 +7,9 @@ embedding_size = 128
 num_images = 202599
 num_identities = 10177
 valid_ratio = 0.005
-num_train_samples = 196999  # 202,599 - 5,600 = 196,999, 5,600 were excluded as they cannot be aligned by dlib
+# 202,599 - 5,600 = 196,999, removing 1 makes it a multiple of 3.
+# 5,600 were excluded as they cannot be aligned by dlib
+num_train_samples = 196998
 num_valid_samples = 2185    # LFW data set: 6000 pairs => 2185 triplets
 predictor_path = 'models/shape_predictor_5_face_landmarks.dat'
 alpha = 0.2
