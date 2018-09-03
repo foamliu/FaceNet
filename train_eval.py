@@ -11,7 +11,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import image_folder, img_size, channel, num_celeba_train_samples, SENTINEL, semi_hard_mode
+from config import image_folder, img_size, channel, num_train_samples, SENTINEL, semi_hard_mode
 from utils import get_best_model, get_train_images
 
 
@@ -119,7 +119,7 @@ def run(gpuids, q):
 
 
 def listener(q):
-    pbar = tqdm(total=num_celeba_train_samples // 3)
+    pbar = tqdm(total=num_train_samples // 3)
     for item in iter(q.get, None):
         pbar.update()
 
@@ -151,7 +151,7 @@ train_images = get_train_images()
 
 def calculate_distance_list(image_i):
     embedding_i = embeddings[image_i]
-    distance_list = np.empty(shape=(num_celeba_train_samples,), dtype=np.float32)
+    distance_list = np.empty(shape=(num_train_samples,), dtype=np.float32)
     for j, image_j in enumerate(train_images):
         embedding_j = embeddings[image_j]
         dist = np.square(np.linalg.norm(embedding_i - embedding_j))

@@ -9,8 +9,7 @@ num_identities = 10177
 valid_ratio = 0.005
 # 5,600 were excluded as they cannot be aligned by dlib
 # 202,599 - 5,600 = 196,999, separate into two classes: train and valid.
-num_celeba_train_samples = 194814
-num_celeba_valid_samples = 2184
+num_train_samples = 196998
 num_lfw_valid_samples = 2185    # LFW data set: 6000 pairs => 2185 triplets
 predictor_path = 'models/shape_predictor_5_face_landmarks.dat'
 alpha = 0.2
