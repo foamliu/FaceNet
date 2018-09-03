@@ -5,7 +5,7 @@ import tensorflow as tf
 from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 from keras.utils import multi_gpu_model
 
-from config import patience, epochs, num_train_samples, num_celeba_valid_samples, batch_size
+from config import patience, epochs, num_train_samples, num_lfw_valid_samples, batch_size
 from data_generator import DataGenSequence
 from model import build_model
 from utils import get_available_gpus, get_available_cpus, ensure_folder, triplet_loss, get_smallest_loss, get_best_model
@@ -54,7 +54,7 @@ if __name__ == '__main__':
         if pretrained_path is not None:
             new_model.load_weights(pretrained_path)
 
-    #sgd = keras.optimizers.SGD(lr=5e-6, momentum=0.9, nesterov=True, decay=1e-6)
+    # sgd = keras.optimizers.SGD(lr=5e-6, momentum=0.9, nesterov=True, decay=1e-6)
     adam = keras.optimizers.Adam(lr=0.05)
     new_model.compile(optimizer=adam, loss=triplet_loss)
 
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     new_model.fit_generator(DataGenSequence('train'),
                             steps_per_epoch=num_train_samples // batch_size,
                             validation_data=DataGenSequence('valid'),
-                            validation_steps=num_celeba_valid_samples // batch_size,
+                            validation_steps=num_lfw_valid_samples // batch_size,
                             epochs=epochs,
                             verbose=1,
                             callbacks=callbacks,
