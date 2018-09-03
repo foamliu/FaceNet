@@ -57,7 +57,7 @@ def get_data_stats():
         if len(line) > 0:
             tokens = line.split(' ')
             image_name = tokens[0].strip()
-            if image_name not in excludes:
+            if image_name not in excludes and image_name != '202599.jpg':
                 id = tokens[1].strip()
                 ids.add(id)
                 images.append(image_name)
