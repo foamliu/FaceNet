@@ -23,6 +23,6 @@ lfw_folder = 'data/lfw_funneled'
 
 semi_hard_mode = 'semi-hard'
 hard_mode = 'hard'
-triplet_select_mode = semi_hard_mode
+triplet_select_mode = hard_mode
 
 best_model = 'models/model.01-0.0087.hdf5'
