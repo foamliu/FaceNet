@@ -9,7 +9,7 @@ import tensorflow as tf
 from tensorflow.python.client import device_lib
 from tqdm import tqdm
 
-from config import alpha, identity_annot_filename, num_train_samples, lfw_folder
+from config import alpha, identity_annot_filename, num_celeba_train_samples, lfw_folder
 
 
 def ensure_folder(folder):
@@ -85,13 +85,13 @@ def get_random_triplets(usage):
     ids, images, image2id, id2images = get_data_stats()
 
     if usage == 'train':
-        images = images[:num_train_samples]
+        images = images[:num_celeba_train_samples]
     else:
-        images = images[num_train_samples:]
+        images = images[num_celeba_train_samples:]
 
     data_set = []
 
-    for i in tqdm(range(num_train_samples)):
+    for i in tqdm(range(num_celeba_train_samples)):
         # choose a_image
         while True:
             a_image = random.choice(images)
@@ -116,7 +116,7 @@ def get_random_triplets(usage):
 
 def get_train_images():
     _, images, _, _ = get_data_stats()
-    return sorted(images)[:num_train_samples]
+    return sorted(images)[:num_celeba_train_samples]
 
 
 def get_lfw_images():

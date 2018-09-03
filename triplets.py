@@ -7,7 +7,7 @@ from multiprocessing import Pool
 import numpy as np
 from tqdm import tqdm
 
-from config import alpha, num_train_samples, batch_size, semi_hard_mode, hard_mode
+from config import alpha, num_celeba_train_samples, batch_size, semi_hard_mode, hard_mode
 from utils import get_data_stats
 
 ids, images, image2id, id2images = get_data_stats()
@@ -98,8 +98,8 @@ def select_one_batch(config):
 
 
 def select_train_triplets(select_mode):
-    num_batches = int(math.ceil(num_train_samples / batch_size))
-    remain = num_train_samples
+    num_batches = int(math.ceil(num_celeba_train_samples / batch_size))
+    remain = num_celeba_train_samples
     batch_configs = []
     for i in range(num_batches):
         start = i * batch_size

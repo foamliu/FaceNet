@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import image_folder, img_size, channel, num_lfw_valid_samples, SENTINEL
+from config import image_folder, img_size, channel, num_celeba_valid_samples, SENTINEL
 from utils import get_random_triplets, get_best_model
 
 
@@ -115,7 +115,7 @@ def run(gpuids, q):
 
 
 def listener(q):
-    pbar = tqdm(total=num_lfw_valid_samples)
+    pbar = tqdm(total=num_celeba_valid_samples)
     for item in iter(q.get, None):
         pbar.update()
 
