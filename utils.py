@@ -80,9 +80,14 @@ def triplet_loss(y_true, y_pred):
     return loss
 
 
-def get_random_triplets():
+def get_random_triplets(usage):
     # Random selection of validation set samples
     ids, images, image2id, id2images = get_data_stats()
+
+    if usage == 'train':
+        images = images[:num_train_samples]
+    else:
+        images = images[num_train_samples:]
 
     data_set = []
 
@@ -111,7 +116,7 @@ def get_random_triplets():
 
 def get_train_images():
     _, images, _, _ = get_data_stats()
-    return sorted(images)
+    return sorted(images)[:num_train_samples]
 
 
 def get_lfw_images():

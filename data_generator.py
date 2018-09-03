@@ -23,7 +23,7 @@ class DataGenSequence(Sequence):
                 with open('data/train_triplets.json', 'r') as file:
                     self.samples = json.load(file)
             else:
-                self.samples = get_random_triplets()
+                self.samples = get_random_triplets('train')
         else:
             print('loading valid samples(LFW)')
             self.image_folder = lfw_folder

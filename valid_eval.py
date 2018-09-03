@@ -10,7 +10,7 @@ import numpy as np
 from keras.applications.inception_resnet_v2 import preprocess_input
 from tqdm import tqdm
 
-from config import image_folder, img_size, channel, num_valid_samples, SENTINEL
+from config import image_folder, img_size, channel, num_lfw_valid_samples, SENTINEL
 from utils import get_random_triplets, get_best_model
 
 
@@ -105,7 +105,7 @@ class Scheduler:
 
 def run(gpuids, q):
     # scan all files under img_path
-    samples = get_random_triplets()
+    samples = get_random_triplets('valid')
 
     # init scheduler
     x = Scheduler(gpuids, q)
@@ -115,7 +115,7 @@ def run(gpuids, q):
 
 
 def listener(q):
-    pbar = tqdm(total=num_valid_samples)
+    pbar = tqdm(total=num_lfw_valid_samples)
     for item in iter(q.get, None):
         pbar.update()
 

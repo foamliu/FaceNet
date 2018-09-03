@@ -10,7 +10,7 @@ from keras.applications.inception_resnet_v2 import preprocess_input
 
 from config import img_size, channel, embedding_size, lfw_folder
 from model import build_model
-from utils import get_random_triplets, get_best_model
+from utils import get_best_model
 
 if __name__ == '__main__':
     model = build_model()
