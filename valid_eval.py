@@ -106,6 +106,7 @@ class Scheduler:
 def run(gpuids, q):
     # scan all files under img_path
     samples = get_random_triplets('valid')
+    print('loaded {} random valid samples'.format(len(samples)))
 
     # init scheduler
     x = Scheduler(gpuids, q)
