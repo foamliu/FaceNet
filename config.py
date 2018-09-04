@@ -1,6 +1,7 @@
 img_size = 139
 channel = 3
-batch_size = 192
+batch_size = 128
+triplets_selection_batch_size = 1800
 epochs = 15
 patience = 10
 embedding_size = 128
